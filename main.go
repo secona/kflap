@@ -8,22 +8,24 @@ import (
 )
 
 func main() {
-	rl.InitWindow(800, 450, "kflap")
-	defer rl.CloseWindow()
-
+	rl.SetConfigFlags(rl.FlagWindowResizable)
 	rl.SetTargetFPS(60)
 
-	var button bool
+	rl.InitWindow(800, 450, "kflap")
+	defer rl.CloseWindow()
 
 	for !rl.WindowShouldClose() {
 		rl.BeginDrawing()
 
 		rl.ClearBackground(rl.RayWhite)
 
-		button = rg.Button(rl.NewRectangle(50, 150, 100, 40), "Click")
-		if button {
-			fmt.Println("Clicked on button")
-		}
+		rg.SetStyle(rg.DEFAULT, rg.BORDER_COLOR_NORMAL, int64(rl.ColorToInt(rl.Black)))
+		rg.SetStyle(rg.BUTTON, rg.TEXT_COLOR_NORMAL, int64(rl.ColorToInt(rl.Black)))
+
+		rg.Button(rl.NewRectangle(50, 50, 40, 40), "Click")
+		rg.Button(rl.NewRectangle(100, 50, 40, 40), "Click")
+		rg.Button(rl.NewRectangle(150, 50, 40, 40), "Click")
+		rg.Button(rl.NewRectangle(200, 50, 40, 40), "Click")
 
 		if (rl.IsKeyPressed(rl.KeyOne)) {
 			fmt.Println("1")
