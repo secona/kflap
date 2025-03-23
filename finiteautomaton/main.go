@@ -1,6 +1,8 @@
 package finiteautomaton
 
 import (
+	"math"
+
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -87,13 +89,37 @@ func Run() {
 		}
 
 		for t := range fa.Transitions {
-			rl.DrawLineEx(t.from.Pos, t.to.Pos, 2, rl.LightGray)
+			drawArrow(t.from.Pos, t.to.Pos)
 		}
 
 		if dragging {
-			rl.DrawLineEx(draggingStart.Pos, mousePos, 2, rl.LightGray)
+			drawArrow(draggingStart.Pos, mousePos)
 		}
 
 		rl.EndDrawing()
 	}
+}
+
+func drawArrow(from, to rl.Vector2) {
+	headAngle := math.Pi / 4
+	headLength := float32(15)
+	color := rl.DarkGray
+
+	angle := math.Atan2(float64(to.Y - from.Y), float64(to.X - from.X))
+
+	leftAngle := angle + headAngle
+	rightAngle := angle - headAngle
+
+	leftX := to.X - float32(math.Cos(leftAngle)) * headLength
+	leftY := to.Y - float32(math.Sin(leftAngle)) * headLength
+
+	rightX := to.X - float32(math.Cos(rightAngle)) * headLength
+	rightY := to.Y - float32(math.Sin(rightAngle)) * headLength
+
+	leftPoint := rl.Vector2{X: leftX, Y: leftY}
+	rightPoint := rl.Vector2{X: rightX, Y: rightY}
+
+	rl.DrawLineEx(from, to, 2, color)
+	rl.DrawLineEx(to, leftPoint, 2, color)
+	rl.DrawLineEx(to, rightPoint, 2, color)
 }
