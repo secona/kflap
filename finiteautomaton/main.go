@@ -22,7 +22,7 @@ func Run() {
 	circleRadius := float32(20)
 
 	dragging := false
-	draggingStart := rl.Vector2{}
+	var draggingStart *State
 
 	for !rl.WindowShouldClose() {
 		mousePos := rl.GetMousePosition()
@@ -49,7 +49,7 @@ func Run() {
 				for s := range fa.States {
 					if rl.CheckCollisionPointCircle(mousePos, s.Pos, circleRadius) {
 						if !dragging {
-							draggingStart = s.Pos
+							draggingStart = &s
 						}
 
 						dragging = true
@@ -60,6 +60,12 @@ func Run() {
 			}
 
 			if rl.IsMouseButtonReleased(rl.MouseLeftButton) {
+				for s := range fa.States {
+					if rl.CheckCollisionPointCircle(mousePos, s.Pos, circleRadius) {
+						fa.AddTransition(draggingStart, &s)
+					}
+				}
+
 				dragging = false
 			}
 		}
@@ -80,8 +86,12 @@ func Run() {
 			rl.DrawCircleV(s.Pos, circleRadius, rl.LightGray)
 		}
 
+		for t := range fa.Transitions {
+			rl.DrawLineEx(t.from.Pos, t.to.Pos, 2, rl.LightGray)
+		}
+
 		if dragging {
-			rl.DrawLineEx(draggingStart, mousePos, 2, rl.LightGray)
+			rl.DrawLineEx(draggingStart.Pos, mousePos, 2, rl.LightGray)
 		}
 
 		rl.EndDrawing()

@@ -39,6 +39,14 @@ func (fa *FiniteAutomaton) States(yield func(State) bool) {
 	}
 }
 
+func (fa *FiniteAutomaton) Transitions(yield func(Transition) bool) {
+	for _, t := range fa.transitions {
+		if !yield(t) {
+			return
+		}
+	}
+}
+
 func (fa *FiniteAutomaton) AddState(pos rl.Vector2) {
 	s := State {
 		Label: fmt.Sprint(fa.stateCount),
@@ -49,8 +57,10 @@ func (fa *FiniteAutomaton) AddState(pos rl.Vector2) {
 	fa.stateCount++;
 }
 
-func (fa *FiniteAutomaton) AddTransition() {
+func (fa *FiniteAutomaton) AddTransition(start *State, to *State) {
+	t := Transition { start, to }
 
+	fa.transitions = append(fa.transitions, t)
 }
 
 func (fa *FiniteAutomaton) RemoveState(s State) {
