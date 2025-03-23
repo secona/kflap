@@ -123,7 +123,7 @@ func Run() {
 		rl.ClearBackground(rl.RayWhite)
 
 		for _, s := range fa.states {
-			rl.DrawCircleV(s.Pos, circleRadius, rl.LightGray)
+			drawState(*s)
 		}
 
 		for i := range fa.transitions {
@@ -161,4 +161,19 @@ func drawArrow(from, to rl.Vector2) {
 	rl.DrawLineEx(from, to, 2, color)
 	rl.DrawLineEx(to, leftPoint, 2, color)
 	rl.DrawLineEx(to, rightPoint, 2, color)
+}
+
+func drawState(s State) {
+	rl.DrawCircleV(s.Pos, 20, rl.LightGray)
+
+	fontSize := int32(14)
+	text := "q" + s.Label
+
+	textW := rl.MeasureText("q0", 14)
+	textH := fontSize
+
+	textX := s.Pos.X - float32(textW) / 2
+	textY := s.Pos.Y - float32(textH) / 2
+
+	rl.DrawText(text, int32(textX), int32(textY), fontSize, rl.Black)
 }
