@@ -37,6 +37,7 @@ func Run() {
 				for s := range fa.States {
 					if rl.CheckCollisionPointCircle(mousePos, s.Pos, circleRadius) {
 						fa.RemoveState(s)
+						break
 					}
 				}
 			}
@@ -45,11 +46,17 @@ func Run() {
 
 		case StateTransition:
 			if rl.IsMouseButtonDown(rl.MouseLeftButton) {
-				if !dragging {
-					draggingStart = mousePos
-				}
+				for s := range fa.States {
+					if rl.CheckCollisionPointCircle(mousePos, s.Pos, circleRadius) {
+						if !dragging {
+							draggingStart = s.Pos
+						}
 
-				dragging = true
+						dragging = true
+
+						break
+					}
+				}
 			}
 
 			if rl.IsMouseButtonReleased(rl.MouseLeftButton) {
