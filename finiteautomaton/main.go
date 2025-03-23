@@ -11,32 +11,33 @@ func Run() {
 	rl.InitWindow(800, 450, "kflap")
 	defer rl.CloseWindow()
 
-	var circles []rl.Vector2
+	fa := NewAutomaton()
+
 	circleRadius := float32(20)
 
 	for !rl.WindowShouldClose() {
 		mousePos := rl.GetMousePosition()
 
 		if rl.IsMouseButtonPressed(rl.MouseLeftButton) {
-			circles = append(circles, mousePos)
+			fa.AddState(mousePos)
 		}
 
-		if rl.IsMouseButtonPressed(rl.MouseRightButton) {
-			for i := 0; i < len(circles); i++ {
-				if rl.CheckCollisionPointCircle(mousePos, circles[i], circleRadius) {
-					// Remove circle
-					circles = append(circles[:i], circles[i+1:]...)
-					break // Stop after removing one
-				}
-			}
-		}
+		// if rl.IsMouseButtonPressed(rl.MouseRightButton) {
+		// 	for i := 0; i < len(circles); i++ {
+		// 		if rl.CheckCollisionPointCircle(mousePos, circles[i], circleRadius) {
+		// 			// Remove circle
+		// 			circles = append(circles[:i], circles[i+1:]...)
+		// 			break // Stop after removing one
+		// 		}
+		// 	}
+		// }
 
 		rl.BeginDrawing()
 
 		rl.ClearBackground(rl.RayWhite)
 
-		for _, pos := range circles {
-			rl.DrawCircleV(pos, circleRadius, rl.LightGray)
+		for s := range fa.States {
+			rl.DrawCircleV(s.Pos, circleRadius, rl.LightGray)
 		}
 
 		rl.EndDrawing()
