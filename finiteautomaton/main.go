@@ -21,6 +21,9 @@ func Run() {
 
 	circleRadius := float32(20)
 
+	dragging := false
+	draggingStart := rl.Vector2{}
+
 	for !rl.WindowShouldClose() {
 		mousePos := rl.GetMousePosition()
 
@@ -41,14 +44,24 @@ func Run() {
 			break
 
 		case StateTransition:
-			break
+			if rl.IsMouseButtonDown(rl.MouseLeftButton) {
+				if !dragging {
+					draggingStart = mousePos
+				}
+
+				dragging = true
+			}
+
+			if rl.IsMouseButtonReleased(rl.MouseLeftButton) {
+				dragging = false
+			}
 		}
 
 		if rl.IsKeyPressed(rl.KeyOne) {
 			st = StateState
 		}
 
-		if rl.IsKeyPressed(rl.KeyTwo) {
+		if rl.IsKeyPressed(rl.KeyTwo) && !dragging {
 			st = StateTransition
 		}
 
@@ -58,6 +71,10 @@ func Run() {
 
 		for s := range fa.States {
 			rl.DrawCircleV(s.Pos, circleRadius, rl.LightGray)
+		}
+
+		if dragging {
+			rl.DrawLineEx(draggingStart, mousePos, 2, rl.LightGray)
 		}
 
 		rl.EndDrawing()
