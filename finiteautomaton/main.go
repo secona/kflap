@@ -22,15 +22,13 @@ func Run() {
 			fa.AddState(mousePos)
 		}
 
-		// if rl.IsMouseButtonPressed(rl.MouseRightButton) {
-		// 	for i := 0; i < len(circles); i++ {
-		// 		if rl.CheckCollisionPointCircle(mousePos, circles[i], circleRadius) {
-		// 			// Remove circle
-		// 			circles = append(circles[:i], circles[i+1:]...)
-		// 			break // Stop after removing one
-		// 		}
-		// 	}
-		// }
+		if rl.IsMouseButtonPressed(rl.MouseRightButton) {
+			for s := range fa.States {
+				if rl.CheckCollisionPointCircle(mousePos, s.Pos, circleRadius) {
+					fa.RemoveState(s)
+				}
+			}
+		}
 
 		rl.BeginDrawing()
 
