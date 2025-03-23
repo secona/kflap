@@ -9,6 +9,7 @@ import (
 const (
 	StateState = 1
 	StateTransition = 2
+	StateMove = 3
 )
 
 func Run() {
@@ -26,6 +27,9 @@ func Run() {
 	dragging := false
 	var draggingStart *State
 
+	moving := false
+	var movingState *State
+
 	for !rl.WindowShouldClose() {
 		mousePos := rl.GetMousePosition()
 
@@ -36,7 +40,9 @@ func Run() {
 			}
 
 			if rl.IsMouseButtonPressed(rl.MouseRightButton) {
-				for s := range fa.States {
+				for i := range fa.states {
+					s := &fa.states[i]
+
 					if rl.CheckCollisionPointCircle(mousePos, s.Pos, circleRadius) {
 						fa.RemoveState(s)
 						break
@@ -47,11 +53,13 @@ func Run() {
 			break
 
 		case StateTransition:
-			if rl.IsMouseButtonDown(rl.MouseLeftButton) {
-				for s := range fa.States {
+			if rl.IsMouseButtonPressed(rl.MouseLeftButton) {
+				for i := range fa.states {
+					s := &fa.states[i]
+
 					if rl.CheckCollisionPointCircle(mousePos, s.Pos, circleRadius) {
 						if !dragging {
-							draggingStart = &s
+							draggingStart = s
 						}
 
 						dragging = true
@@ -62,14 +70,48 @@ func Run() {
 			}
 
 			if rl.IsMouseButtonReleased(rl.MouseLeftButton) {
-				for s := range fa.States {
+				for i := range fa.states {
+					s := &fa.states[i]
+
 					if rl.CheckCollisionPointCircle(mousePos, s.Pos, circleRadius) {
-						fa.AddTransition(draggingStart, &s)
+						fa.AddTransition(draggingStart, s)
 					}
 				}
 
 				dragging = false
 			}
+
+			break
+
+		case StateMove:
+			if rl.IsMouseButtonPressed(rl.MouseLeftButton) {
+				for i := range fa.states {
+					s := &fa.states[i]
+
+					if rl.CheckCollisionPointCircle(mousePos, s.Pos, circleRadius) {
+						if !moving {
+							movingState = s
+						}
+
+						moving = true
+
+						break
+					}
+				}
+			}
+
+			if rl.IsMouseButtonDown(rl.MouseLeftButton) {
+				if moving {
+					fa.MoveState(movingState, mousePos)
+				}
+			}
+
+			if rl.IsMouseButtonReleased(rl.MouseLeftButton) {
+				moving = false
+				movingState	= nil
+			}
+
+			break
 		}
 
 		if rl.IsKeyPressed(rl.KeyOne) {
@@ -80,15 +122,21 @@ func Run() {
 			st = StateTransition
 		}
 
+		if rl.IsKeyPressed(rl.KeyThree) && !moving {
+			st = StateMove 
+		}
+
 		rl.BeginDrawing()
 
 		rl.ClearBackground(rl.RayWhite)
 
-		for s := range fa.States {
+		for i := range fa.states {
+			s := &fa.states[i]
 			rl.DrawCircleV(s.Pos, circleRadius, rl.LightGray)
 		}
 
-		for t := range fa.Transitions {
+		for i := range fa.transitions {
+			t := &fa.transitions[i]
 			drawArrow(t.from.Pos, t.to.Pos)
 		}
 
