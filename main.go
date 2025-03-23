@@ -1,7 +1,6 @@
 package main
 
 import (
-	rg "github.com/gen2brain/raylib-go/raygui"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -35,14 +34,6 @@ func main() {
 		rl.BeginDrawing()
 
 		rl.ClearBackground(rl.RayWhite)
-
-		rg.SetStyle(rg.DEFAULT, rg.BORDER_COLOR_NORMAL, int64(rl.ColorToInt(rl.Black)))
-		rg.SetStyle(rg.BUTTON, rg.TEXT_COLOR_NORMAL, int64(rl.ColorToInt(rl.Black)))
-
-		rg.Button(rl.NewRectangle(50, 50, 40, 40), "Click")
-		rg.Button(rl.NewRectangle(100, 50, 40, 40), "Click")
-		rg.Button(rl.NewRectangle(150, 50, 40, 40), "Click")
-		rg.Button(rl.NewRectangle(200, 50, 40, 40), "Click")
 
 		for _, pos := range circles {
 			rl.DrawCircleV(pos, circleRadius, rl.LightGray)
