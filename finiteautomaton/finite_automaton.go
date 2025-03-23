@@ -7,16 +7,16 @@ import (
 
 type State struct {
 	Label string
-	Pos	  rl.Vector2
+	Pos   rl.Vector2
 }
 
 type Transition struct {
 	from *State
-	to *State
+	to   *State
 }
 
 type FiniteAutomaton struct {
-	states []*State
+	states      []*State
 	transitions []Transition
 
 	stateCount int
@@ -24,7 +24,7 @@ type FiniteAutomaton struct {
 
 func NewAutomaton() *FiniteAutomaton {
 	return &FiniteAutomaton{
-		states: make([]*State, 0),
+		states:      make([]*State, 0),
 		transitions: make([]Transition, 0),
 
 		stateCount: 0,
@@ -32,17 +32,17 @@ func NewAutomaton() *FiniteAutomaton {
 }
 
 func (fa *FiniteAutomaton) AddState(pos rl.Vector2) {
-	s := &State {
+	s := &State{
 		Label: fmt.Sprint(fa.stateCount),
-		Pos: pos,
+		Pos:   pos,
 	}
 
 	fa.states = append(fa.states, s)
-	fa.stateCount++;
+	fa.stateCount++
 }
 
 func (fa *FiniteAutomaton) AddTransition(start *State, to *State) {
-	t := Transition { start, to }
+	t := Transition{start, to}
 
 	fa.transitions = append(fa.transitions, t)
 }
@@ -52,7 +52,7 @@ func (fa *FiniteAutomaton) RemoveState(s *State) {
 
 	for _, state := range fa.states {
 		if s != state {
-			newStates = append(newStates, state);
+			newStates = append(newStates, state)
 		}
 	}
 

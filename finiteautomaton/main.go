@@ -7,9 +7,9 @@ import (
 )
 
 const (
-	StateState = 1
+	StateState      = 1
 	StateTransition = 2
-	StateMove = 3
+	StateMove       = 3
 )
 
 func Run() {
@@ -100,7 +100,7 @@ func Run() {
 
 			if rl.IsMouseButtonReleased(rl.MouseLeftButton) {
 				moving = false
-				movingState	= nil
+				movingState = nil
 			}
 
 			break
@@ -115,7 +115,7 @@ func Run() {
 		}
 
 		if rl.IsKeyPressed(rl.KeyThree) && !moving {
-			st = StateMove 
+			st = StateMove
 		}
 
 		rl.BeginDrawing()
@@ -144,16 +144,16 @@ func drawArrow(from, to rl.Vector2) {
 	headLength := float32(15)
 	color := rl.DarkGray
 
-	angle := math.Atan2(float64(to.Y - from.Y), float64(to.X - from.X))
+	angle := math.Atan2(float64(to.Y-from.Y), float64(to.X-from.X))
 
 	leftAngle := angle + headAngle
 	rightAngle := angle - headAngle
 
-	leftX := to.X - float32(math.Cos(leftAngle)) * headLength
-	leftY := to.Y - float32(math.Sin(leftAngle)) * headLength
+	leftX := to.X - float32(math.Cos(leftAngle))*headLength
+	leftY := to.Y - float32(math.Sin(leftAngle))*headLength
 
-	rightX := to.X - float32(math.Cos(rightAngle)) * headLength
-	rightY := to.Y - float32(math.Sin(rightAngle)) * headLength
+	rightX := to.X - float32(math.Cos(rightAngle))*headLength
+	rightY := to.Y - float32(math.Sin(rightAngle))*headLength
 
 	leftPoint := rl.Vector2{X: leftX, Y: leftY}
 	rightPoint := rl.Vector2{X: rightX, Y: rightY}
