@@ -49,6 +49,7 @@ func (fa *FiniteAutomaton) AddTransition(start *State, to *State) {
 
 func (fa *FiniteAutomaton) RemoveState(s *State) {
 	newStates := []*State{}
+	newTransitions := []Transition{}
 
 	for _, state := range fa.states {
 		if s != state {
@@ -56,7 +57,14 @@ func (fa *FiniteAutomaton) RemoveState(s *State) {
 		}
 	}
 
+	for _, t := range fa.transitions {
+		if t.from != s && t.to != s {
+			newTransitions = append(newTransitions, t)
+		}
+	}
+
 	fa.states = newStates
+	fa.transitions = newTransitions
 }
 
 func (fa *FiniteAutomaton) RemoveTransition() {
