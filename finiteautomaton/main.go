@@ -40,9 +40,7 @@ func Run() {
 			}
 
 			if rl.IsMouseButtonPressed(rl.MouseRightButton) {
-				for i := range fa.states {
-					s := &fa.states[i]
-
+				for _, s := range fa.states {
 					if rl.CheckCollisionPointCircle(mousePos, s.Pos, circleRadius) {
 						fa.RemoveState(s)
 						break
@@ -54,9 +52,7 @@ func Run() {
 
 		case StateTransition:
 			if rl.IsMouseButtonPressed(rl.MouseLeftButton) {
-				for i := range fa.states {
-					s := &fa.states[i]
-
+				for _, s := range fa.states {
 					if rl.CheckCollisionPointCircle(mousePos, s.Pos, circleRadius) {
 						if !dragging {
 							draggingStart = s
@@ -70,9 +66,7 @@ func Run() {
 			}
 
 			if rl.IsMouseButtonReleased(rl.MouseLeftButton) {
-				for i := range fa.states {
-					s := &fa.states[i]
-
+				for _, s := range fa.states {
 					if rl.CheckCollisionPointCircle(mousePos, s.Pos, circleRadius) {
 						fa.AddTransition(draggingStart, s)
 					}
@@ -85,9 +79,7 @@ func Run() {
 
 		case StateMove:
 			if rl.IsMouseButtonPressed(rl.MouseLeftButton) {
-				for i := range fa.states {
-					s := &fa.states[i]
-
+				for _, s := range fa.states {
 					if rl.CheckCollisionPointCircle(mousePos, s.Pos, circleRadius) {
 						if !moving {
 							movingState = s
@@ -130,8 +122,7 @@ func Run() {
 
 		rl.ClearBackground(rl.RayWhite)
 
-		for i := range fa.states {
-			s := &fa.states[i]
+		for _, s := range fa.states {
 			rl.DrawCircleV(s.Pos, circleRadius, rl.LightGray)
 		}
 

@@ -16,7 +16,7 @@ type Transition struct {
 }
 
 type FiniteAutomaton struct {
-	states []State
+	states []*State
 	transitions []Transition
 
 	stateCount int
@@ -24,7 +24,7 @@ type FiniteAutomaton struct {
 
 func NewAutomaton() *FiniteAutomaton {
 	return &FiniteAutomaton{
-		states: make([]State, 0),
+		states: make([]*State, 0),
 		transitions: make([]Transition, 0),
 
 		stateCount: 0,
@@ -32,7 +32,7 @@ func NewAutomaton() *FiniteAutomaton {
 }
 
 func (fa *FiniteAutomaton) AddState(pos rl.Vector2) {
-	s := State {
+	s := &State {
 		Label: fmt.Sprint(fa.stateCount),
 		Pos: pos,
 	}
@@ -48,11 +48,11 @@ func (fa *FiniteAutomaton) AddTransition(start *State, to *State) {
 }
 
 func (fa *FiniteAutomaton) RemoveState(s *State) {
-	newStates := []State{}
+	newStates := []*State{}
 
-	for i := range fa.states {
-		if s != &fa.states[i] {
-			newStates = append(newStates, fa.states[i]);
+	for _, state := range fa.states {
+		if s != state {
+			newStates = append(newStates, state);
 		}
 	}
 
