@@ -17,8 +17,8 @@ class State {
 
 class Transition {
  public:
-  std::shared_ptr<State> from;
-  std::shared_ptr<State> to;
+  std::weak_ptr<State> from;
+  std::weak_ptr<State> to;
 
   Transition(std::shared_ptr<State> from, std::shared_ptr<State> to);
 };

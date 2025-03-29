@@ -80,8 +80,13 @@ int main() {
       draw_state(*s);
     }
 
-    for (auto t : fa.transitions) {
-      draw_transition(t);
+    for (auto t = fa.transitions.begin(); t != fa.transitions.end();) {
+      if (!t->to.expired() && !t->from.expired()) {
+        draw_arrow(t->from.lock()->position, t->to.lock()->position);
+        ++t;
+      } else {
+        t = fa.transitions.erase(t);
+      }
     }
 
     EndDrawing();

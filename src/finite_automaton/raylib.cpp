@@ -17,7 +17,7 @@ void draw_state(State state) {
 }
 
 void draw_transition(Transition t) {
-  draw_arrow(t.from->position, t.to->position);
+  // draw_arrow(t.from->position, t.to->position);
 }
 
 void draw_arrow(Vector2 from, Vector2 to) {
