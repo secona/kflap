@@ -6,8 +6,8 @@
 void draw_state(State state) {
   const int fontSize = 14;
 
-  int textW = MeasureText(state.label.c_str(), fontSize);
-  int textH = fontSize;
+  float textW = MeasureText(state.label.c_str(), fontSize);
+  float textH = fontSize;
 
   int textX = state.position.x - textW / 2;
   int textY = state.position.y - textH / 2;
