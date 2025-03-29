@@ -3,7 +3,6 @@
 
 #include <raylib.h>
 
-#include <memory>
 #include <optional>
 #include <unordered_map>
 
@@ -27,7 +26,7 @@ class FiniteAutomatonCanvas {
   std::optional<std::shared_ptr<State>> moving_state = std::nullopt;
 
   Tools tool = TOOL_STATE;
-  FiniteAutomaton fa;
+  FiniteAutomatonCore fa;
 
   void draw_state(std::shared_ptr<State> state);
   void draw_transition(Transition);

@@ -1,8 +1,6 @@
 #ifndef _KFLAP_FINITE_AUTOMATON_CORE_H_
 #define _KFLAP_FINITE_AUTOMATON_CORE_H_
 
-#include <raylib.h>
-
 #include <memory>
 #include <string>
 #include <vector>
@@ -23,13 +21,13 @@ class Transition {
   Transition(std::shared_ptr<State> from, std::shared_ptr<State> to);
 };
 
-class FiniteAutomaton {
+class FiniteAutomatonCore {
  public:
   std::vector<std::shared_ptr<State>> states;
   std::vector<Transition> transitions;
   size_t state_count;
 
-  FiniteAutomaton();
+  FiniteAutomatonCore();
   std::shared_ptr<State> add_state();
   void remove_state(std::shared_ptr<State>);
   void add_transition(std::shared_ptr<State> from, std::shared_ptr<State> to);
