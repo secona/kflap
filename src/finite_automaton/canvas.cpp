@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include "finite_automaton/renderer.h"
+#include "finite_automaton/canvas.h"
 #include "finite_automaton/core.h"
 
 void draw_state(State state) {
@@ -45,10 +45,10 @@ void draw_transition(Transition t) {
   DrawText(text, from.x + (to.x-from.x)/2, from.y + (to.y-from.y)/2, 14, BLACK);
 }
 
-FiniteAutomatonRenderer::FiniteAutomatonRenderer()
+FiniteAutomatonCanvas::FiniteAutomatonCanvas()
     : transition_from(), moving_state(), fa() {}
 
-void FiniteAutomatonRenderer::run() {
+void FiniteAutomatonCanvas::run() {
   if (IsKeyPressed(TOOL_STATE)) tool = TOOL_STATE;
   if (IsKeyPressed(TOOL_TRANSITION)) tool = TOOL_TRANSITION;
   if (IsKeyPressed(TOOL_MOVE)) tool = TOOL_MOVE;
@@ -123,6 +123,12 @@ void FiniteAutomatonRenderer::run() {
       break;
   }
 
+  draw();
+
+  EndDrawing();
+}
+
+void FiniteAutomatonCanvas::draw() {
   for (auto s : fa.states) {
     draw_state(*s);
   }
@@ -135,6 +141,4 @@ void FiniteAutomatonRenderer::run() {
       t = fa.transitions.erase(t);
     }
   }
-
-  EndDrawing();
 }

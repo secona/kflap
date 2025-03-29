@@ -14,10 +14,11 @@ enum Tools {
   TOOL_MOVE = KEY_THREE,
 };
 
-class FiniteAutomatonRenderer {
+class FiniteAutomatonCanvas {
  public:
-  FiniteAutomatonRenderer();
+  FiniteAutomatonCanvas();
   void run();
+  void draw();
 
  private:
   std::optional<std::shared_ptr<State>> transition_from = std::nullopt;

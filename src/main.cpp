@@ -1,9 +1,9 @@
 #include <raylib.h>
 
-#include "finite_automaton/renderer.h"
+#include "finite_automaton/canvas.h"
 
 int main() {
-  FiniteAutomatonRenderer fa;
+  FiniteAutomatonCanvas fa;
 
   SetConfigFlags(FLAG_WINDOW_RESIZABLE);
   SetTargetFPS(60);
