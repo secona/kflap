@@ -41,9 +41,6 @@
         pkgs.wayland-protocols
         pkgs.libxkbcommon
         pkgs.glfw-wayland
-
-        pkgs.go
-        pkgs.raylib
       ];
     };
   };
