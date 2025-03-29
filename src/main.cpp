@@ -1,5 +1,7 @@
 #include <raylib.h>
 
+#include <memory>
+#include <optional>
 #include <vector>
 
 #include "finite_automaton/core.h"
@@ -11,6 +13,7 @@ enum Tools {
 };
 
 int main() {
+  std::optional<std::shared_ptr<State>> transition_from = std::nullopt;
   FiniteAutomaton fa;
 
   Tools tool = TOOL_STATE;
@@ -44,11 +47,41 @@ int main() {
         }
         break;
 
-      case TOOL_TRANSITION:;
+      case TOOL_TRANSITION:
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+          for (size_t i = 0; i < fa.states.size(); i++) {
+            std::shared_ptr<State> s = fa.states[i];
+            if (CheckCollisionPointCircle(GetMousePosition(), s->position, 20)) {
+              transition_from = s;
+            }
+          }
+        }
+
+        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+          for (size_t i = 0; i < fa.states.size(); i++) {
+            std::shared_ptr<State> s = fa.states[i];
+            if (CheckCollisionPointCircle(GetMousePosition(), s->position, 20)) {
+              fa.add_transition(transition_from.value(), s);
+            }
+          }
+
+          transition_from.reset();
+        }
+
+        if (transition_from.has_value()) {
+          State start = *transition_from.value();
+          DrawLineEx(start.position, GetMousePosition(), 2, BLACK);
+        }
+
+        break;
     }
 
     for (auto s : fa.states) {
       draw_state(*s);
+    }
+
+    for (auto t : fa.transitions) {
+      draw_transition(t);
     }
 
     EndDrawing();
