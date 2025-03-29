@@ -6,33 +6,38 @@
 
 #include "finite_automaton/core.h"
 
+constexpr int FONT_SIZE = 14;
+
+constexpr float ARROW_HEAD_ANGLE = std::numbers::pi / 4;
+constexpr int ARROW_HEAD_LENGTH = 15;
+
+constexpr int STATE_RADIUS = 20;
+constexpr Color STATE_COLOR = LIGHTGRAY;
+constexpr Color STATE_TEXT_COLOR = BLACK;
+
 void FiniteAutomatonCanvas::draw_state(std::shared_ptr<State> state) {
-  const int fontSize = 14;
   Vector2 position = state_positions[state];
 
-  float textW = MeasureText(state->label.c_str(), fontSize);
-  float textH = fontSize;
+  float textW = MeasureText(state->label.c_str(), FONT_SIZE);
+  float textH = FONT_SIZE;
 
   int textX = position.x - textW / 2;
   int textY = position.y - textH / 2;
 
-  DrawCircleV(position, 20, LIGHTGRAY);
-  DrawText(state->label.c_str(), textX, textY, fontSize, BLACK);
+  DrawCircleV(position, STATE_RADIUS, STATE_COLOR);
+  DrawText(state->label.c_str(), textX, textY, FONT_SIZE, STATE_TEXT_COLOR);
 }
 
 void draw_arrow(Vector2 from, Vector2 to) {
-  double head_angle = std::numbers::pi / 4;
-  double head_length = 15;
-
   double angle = std::atan2(to.y - from.y, to.x - from.x);
 
-  float left_angle = angle + head_angle;
-  float left_x = to.x - std::cos(left_angle) * head_length;
-  float left_y = to.y - std::sin(left_angle) * head_length;
+  float left_angle = angle + ARROW_HEAD_ANGLE;
+  float left_x = to.x - std::cos(left_angle) * ARROW_HEAD_LENGTH;
+  float left_y = to.y - std::sin(left_angle) * ARROW_HEAD_LENGTH;
 
-  float right_angle = angle - head_angle;
-  float right_x = to.x - std::cos(right_angle) * head_length;
-  float right_y = to.y - std::sin(right_angle) * head_length;
+  float right_angle = angle - ARROW_HEAD_ANGLE;
+  float right_x = to.x - std::cos(right_angle) * ARROW_HEAD_LENGTH;
+  float right_y = to.y - std::sin(right_angle) * ARROW_HEAD_LENGTH;
 
   DrawLineEx(from, to, 2, BLACK);
   DrawLineEx(to, Vector2{left_x, left_y}, 2, BLACK);
