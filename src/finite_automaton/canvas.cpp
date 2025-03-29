@@ -1,10 +1,16 @@
 #include "finite_automaton/canvas.h"
 
+#include <algorithm>
+#include <optional>
 #include <raylib.h>
 
 #include <cmath>
 
 #include "finite_automaton/core.h"
+
+// ============================================================================
+// CONSTANT VARIABLES
+// ============================================================================
 
 constexpr int FONT_SIZE = 14;
 
@@ -14,6 +20,52 @@ constexpr int ARROW_HEAD_LENGTH = 15;
 constexpr int STATE_RADIUS = 20;
 constexpr Color STATE_COLOR = LIGHTGRAY;
 constexpr Color STATE_TEXT_COLOR = BLACK;
+
+// ============================================================================
+// GENERAL DRAWING FUNCTIONS
+// ============================================================================
+
+void draw_arrow(Vector2 from, Vector2 to) {
+  double angle = std::atan2(to.y - from.y, to.x - from.x);
+
+  Vector2 left = {
+      static_cast<float>(to.x - std::cos(angle + ARROW_HEAD_ANGLE) *
+                                    ARROW_HEAD_LENGTH),
+      static_cast<float>(to.y - std::sin(angle + ARROW_HEAD_ANGLE) *
+                                    ARROW_HEAD_LENGTH),
+  };
+
+  Vector2 right = {
+      static_cast<float>(to.x - std::cos(angle - ARROW_HEAD_ANGLE) *
+                                    ARROW_HEAD_LENGTH),
+      static_cast<float>(to.y - std::sin(angle - ARROW_HEAD_ANGLE) *
+                                    ARROW_HEAD_LENGTH),
+  };
+
+  DrawLineEx(from, to, 2, BLACK);
+  DrawLineEx(to, left, 2, BLACK);
+  DrawLineEx(to, right, 2, BLACK);
+}
+
+// ============================================================================
+// FiniteAutomatonCanvas DRAWING FUNCTIONS
+// ============================================================================
+
+void FiniteAutomatonCanvas::draw() {
+  for (auto s : fa.states) {
+    draw_state(s);
+  }
+
+  fa.transitions.erase(std::remove_if(fa.transitions.begin(),
+                                      fa.transitions.end(),
+                                      [this](const Transition &t) {
+                                        if (t.to.expired() || t.from.expired())
+                                          return true;
+                                        draw_transition(t);
+                                        return false;
+                                      }),
+                       fa.transitions.end());
+}
 
 void FiniteAutomatonCanvas::draw_state(std::shared_ptr<State> state) {
   Vector2 position = state_positions[state];
@@ -28,22 +80,6 @@ void FiniteAutomatonCanvas::draw_state(std::shared_ptr<State> state) {
   DrawText(state->label.c_str(), textX, textY, FONT_SIZE, STATE_TEXT_COLOR);
 }
 
-void draw_arrow(Vector2 from, Vector2 to) {
-  double angle = std::atan2(to.y - from.y, to.x - from.x);
-
-  float left_angle = angle + ARROW_HEAD_ANGLE;
-  float left_x = to.x - std::cos(left_angle) * ARROW_HEAD_LENGTH;
-  float left_y = to.y - std::sin(left_angle) * ARROW_HEAD_LENGTH;
-
-  float right_angle = angle - ARROW_HEAD_ANGLE;
-  float right_x = to.x - std::cos(right_angle) * ARROW_HEAD_LENGTH;
-  float right_y = to.y - std::sin(right_angle) * ARROW_HEAD_LENGTH;
-
-  DrawLineEx(from, to, 2, BLACK);
-  DrawLineEx(to, Vector2{left_x, left_y}, 2, BLACK);
-  DrawLineEx(to, Vector2{right_x, right_y}, 2, BLACK);
-}
-
 void FiniteAutomatonCanvas::draw_transition(Transition t) {
   Vector2 from = state_positions[t.from.lock()];
   Vector2 to = state_positions[t.to.lock()];
@@ -55,8 +91,13 @@ void FiniteAutomatonCanvas::draw_transition(Transition t) {
            BLACK);
 }
 
+// ============================================================================
+// START OF FiniteAutomatonCanvas IMPLEMENTATION
+// ============================================================================
+
 FiniteAutomatonCanvas::FiniteAutomatonCanvas()
-    : state_positions(), transition_from(), moving_state(), fa() {}
+    : state_positions(), transition_from(std::nullopt),
+      moving_state(std::nullopt), tool(TOOL_STATE), fa() {}
 
 void FiniteAutomatonCanvas::run() {
   if (IsKeyPressed(TOOL_STATE))
@@ -78,8 +119,7 @@ void FiniteAutomatonCanvas::run() {
     }
 
     if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-      for (size_t i = 0; i < fa.states.size(); i++) {
-        std::shared_ptr<State> s = fa.states[i];
+      for (auto &s : fa.states) {
         if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s],
                                       20)) {
           fa.remove_state(s);
@@ -91,8 +131,7 @@ void FiniteAutomatonCanvas::run() {
 
   case TOOL_TRANSITION:
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-      for (size_t i = 0; i < fa.states.size(); i++) {
-        std::shared_ptr<State> s = fa.states[i];
+      for (auto &s : fa.states) {
         if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s],
                                       20)) {
           transition_from = s;
@@ -102,8 +141,7 @@ void FiniteAutomatonCanvas::run() {
 
     if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
       if (transition_from.has_value())
-        for (size_t i = 0; i < fa.states.size(); i++) {
-          std::shared_ptr<State> s = fa.states[i];
+        for (auto &s : fa.states) {
           if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s],
                                         20)) {
             fa.add_transition(transition_from.value(), s);
@@ -121,8 +159,7 @@ void FiniteAutomatonCanvas::run() {
 
   case TOOL_MOVE:
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-      for (size_t i = 0; i < fa.states.size(); i++) {
-        std::shared_ptr<State> s = fa.states[i];
+      for (auto &s : fa.states) {
         if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s],
                                       20)) {
           moving_state = s;
@@ -144,19 +181,4 @@ void FiniteAutomatonCanvas::run() {
   draw();
 
   EndDrawing();
-}
-
-void FiniteAutomatonCanvas::draw() {
-  for (auto s : fa.states) {
-    draw_state(s);
-  }
-
-  for (auto t = fa.transitions.begin(); t != fa.transitions.end();) {
-    if (!t->to.expired() && !t->from.expired()) {
-      draw_transition(*t);
-      ++t;
-    } else {
-      t = fa.transitions.erase(t);
-    }
-  }
 }

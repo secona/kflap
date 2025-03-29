@@ -22,10 +22,10 @@ public:
 
 private:
   std::unordered_map<std::shared_ptr<State>, Vector2> state_positions;
-  std::optional<std::shared_ptr<State>> transition_from = std::nullopt;
-  std::optional<std::shared_ptr<State>> moving_state = std::nullopt;
+  std::optional<std::shared_ptr<State>> transition_from;
+  std::optional<std::shared_ptr<State>> moving_state;
 
-  Tools tool = TOOL_STATE;
+  Tools tool;
   FiniteAutomatonCore fa;
 
   void draw_state(std::shared_ptr<State> state);
