@@ -70,7 +70,7 @@ int main() {
 
         if (transition_from.has_value()) {
           State start = *transition_from.value();
-          DrawLineEx(start.position, GetMousePosition(), 2, BLACK);
+          draw_arrow(start.position, GetMousePosition());
         }
 
         break;
