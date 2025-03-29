@@ -1,4 +1,4 @@
-finite_automaton_src = files(['core.cpp', 'raylib.cpp', 'renderer.cpp'])
+finite_automaton_src = files(['core.cpp', 'renderer.cpp'])
 src_files += finite_automaton_src
 
 finite_automaton_lib = static_library('finite_automaton',
