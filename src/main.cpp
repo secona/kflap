@@ -105,7 +105,7 @@ int main() {
 
     for (auto t = fa.transitions.begin(); t != fa.transitions.end();) {
       if (!t->to.expired() && !t->from.expired()) {
-        draw_arrow(t->from.lock()->position, t->to.lock()->position);
+        draw_transition(*t);
         ++t;
       } else {
         t = fa.transitions.erase(t);

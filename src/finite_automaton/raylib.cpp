@@ -17,7 +17,13 @@ void draw_state(State state) {
 }
 
 void draw_transition(Transition t) {
-  // draw_arrow(t.from->position, t.to->position);
+  Vector2 from = t.from.lock()->position;
+  Vector2 to = t.to.lock()->position;
+
+  draw_arrow(from, to);
+
+  char text[] = {t.c, 0};
+  DrawText(text, from.x + (to.x-from.x)/2, from.y + (to.y-from.y)/2, 14, BLACK);
 }
 
 void draw_arrow(Vector2 from, Vector2 to) {

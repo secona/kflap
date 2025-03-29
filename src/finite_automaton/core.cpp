@@ -10,7 +10,7 @@ State::State(size_t number, Vector2 position) : position(position) {
   label = "q" + std::to_string(number);
 }
 
-Transition::Transition(std::shared_ptr<State> from, std::shared_ptr<State> to) : from(from), to(to) {}
+Transition::Transition(std::shared_ptr<State> from, std::shared_ptr<State> to) : from(from), to(to), c('a') {}
 
 FiniteAutomaton::FiniteAutomaton(): states(), transitions(), state_count(0) {}
 
