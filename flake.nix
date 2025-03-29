@@ -18,6 +18,7 @@
         meson
         ninja
         pkg-config
+        clang-tools
       ];
     };
   in {
