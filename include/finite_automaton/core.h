@@ -6,14 +6,14 @@
 #include <vector>
 
 class State {
- public:
+public:
   std::string label;
 
   State(size_t);
 };
 
 class Transition {
- public:
+public:
   std::weak_ptr<State> from;
   std::weak_ptr<State> to;
   char c;
@@ -22,7 +22,7 @@ class Transition {
 };
 
 class FiniteAutomatonCore {
- public:
+public:
   std::vector<std::shared_ptr<State>> states;
   std::vector<Transition> transitions;
   size_t state_count;

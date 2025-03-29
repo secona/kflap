@@ -59,83 +59,86 @@ FiniteAutomatonCanvas::FiniteAutomatonCanvas()
     : state_positions(), transition_from(), moving_state(), fa() {}
 
 void FiniteAutomatonCanvas::run() {
-  if (IsKeyPressed(TOOL_STATE)) tool = TOOL_STATE;
-  if (IsKeyPressed(TOOL_TRANSITION)) tool = TOOL_TRANSITION;
-  if (IsKeyPressed(TOOL_MOVE)) tool = TOOL_MOVE;
+  if (IsKeyPressed(TOOL_STATE))
+    tool = TOOL_STATE;
+  if (IsKeyPressed(TOOL_TRANSITION))
+    tool = TOOL_TRANSITION;
+  if (IsKeyPressed(TOOL_MOVE))
+    tool = TOOL_MOVE;
 
   BeginDrawing();
 
   ClearBackground(RAYWHITE);
 
   switch (tool) {
-    case TOOL_STATE:
-      if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        std::shared_ptr<State> state = fa.add_state();
-        state_positions[state] = GetMousePosition();
-      }
+  case TOOL_STATE:
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+      std::shared_ptr<State> state = fa.add_state();
+      state_positions[state] = GetMousePosition();
+    }
 
-      if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+    if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+      for (size_t i = 0; i < fa.states.size(); i++) {
+        std::shared_ptr<State> s = fa.states[i];
+        if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s],
+                                      20)) {
+          fa.remove_state(s);
+          state_positions.erase(s);
+        }
+      }
+    }
+    break;
+
+  case TOOL_TRANSITION:
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+      for (size_t i = 0; i < fa.states.size(); i++) {
+        std::shared_ptr<State> s = fa.states[i];
+        if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s],
+                                      20)) {
+          transition_from = s;
+        }
+      }
+    }
+
+    if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+      if (transition_from.has_value())
         for (size_t i = 0; i < fa.states.size(); i++) {
           std::shared_ptr<State> s = fa.states[i];
           if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s],
                                         20)) {
-            fa.remove_state(s);
-            state_positions.erase(s);
+            fa.add_transition(transition_from.value(), s);
           }
         }
-      }
-      break;
 
-    case TOOL_TRANSITION:
-      if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        for (size_t i = 0; i < fa.states.size(); i++) {
-          std::shared_ptr<State> s = fa.states[i];
-          if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s],
-                                        20)) {
-            transition_from = s;
-          }
+      transition_from.reset();
+    }
+
+    if (transition_from.has_value()) {
+      draw_arrow(state_positions[*transition_from], GetMousePosition());
+    }
+
+    break;
+
+  case TOOL_MOVE:
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+      for (size_t i = 0; i < fa.states.size(); i++) {
+        std::shared_ptr<State> s = fa.states[i];
+        if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s],
+                                      20)) {
+          moving_state = s;
         }
       }
+    }
 
-      if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
-        if (transition_from.has_value())
-          for (size_t i = 0; i < fa.states.size(); i++) {
-            std::shared_ptr<State> s = fa.states[i];
-            if (CheckCollisionPointCircle(GetMousePosition(),
-                                          state_positions[s], 20)) {
-              fa.add_transition(transition_from.value(), s);
-            }
-          }
+    if (moving_state.has_value()) {
+      state_positions[*moving_state] = GetMousePosition();
+    }
 
-        transition_from.reset();
-      }
+    if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+      moving_state.reset();
+    }
 
-      if (transition_from.has_value()) {
-        draw_arrow(state_positions[*transition_from], GetMousePosition());
-      }
-
-      break;
-
-    case TOOL_MOVE:
-      if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        for (size_t i = 0; i < fa.states.size(); i++) {
-          std::shared_ptr<State> s = fa.states[i];
-          if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s],
-                                        20)) {
-            moving_state = s;
-          }
-        }
-      }
-
-      if (moving_state.has_value()) {
-        state_positions[*moving_state] = GetMousePosition();
-      }
-
-      if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
-        moving_state.reset();
-      }
-
-      break;
+    break;
   }
 
   draw();

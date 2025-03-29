@@ -15,12 +15,12 @@ enum Tools {
 };
 
 class FiniteAutomatonCanvas {
- public:
+public:
   FiniteAutomatonCanvas();
   void run();
   void draw();
 
- private:
+private:
   std::unordered_map<std::shared_ptr<State>, Vector2> state_positions;
   std::optional<std::shared_ptr<State>> transition_from = std::nullopt;
   std::optional<std::shared_ptr<State>> moving_state = std::nullopt;
