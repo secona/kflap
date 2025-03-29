@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 #include <raylib.h>
 
 class State {
@@ -6,9 +7,9 @@ public:
 	std::string label;
 	Vector2 position;
 
-	State(Vector2 pos) {
+	State(int number, Vector2 pos) {
 		position = pos;
-		label = "q0";
+		label = "q" + std::to_string(number);
 	}
 
 	void draw() {
@@ -26,8 +27,7 @@ public:
 };
 
 int main() {
-	Vector2 v{200, 200};
-	State s(v);
+	std::vector<State> states;
 
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	SetTargetFPS(60);
@@ -38,8 +38,15 @@ int main() {
 		BeginDrawing();
 
 		ClearBackground(RAYWHITE);
-		DrawText("Hello, world!", 800/2, 450/2, 14, LIGHTGRAY);
-		s.draw();
+
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+			State s(states.size(), GetMousePosition());
+			states.push_back(s);
+		}
+
+		for (State s : states) {
+			s.draw();
+		}
 
 		EndDrawing();
 	}
