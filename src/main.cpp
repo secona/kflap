@@ -1,34 +1,11 @@
-#include <iostream>
+#include "finite_automaton/core.h"
+#include "finite_automaton/raylib.h"
 #include <vector>
 #include <raylib.h>
 
 enum Tools {
 	TOOL_STATE = KEY_ONE,
 	TOOL_TRANSITION = KEY_TWO,
-};
-
-class State {
-public:
-	std::string label;
-	Vector2 position;
-
-	State(int number, Vector2 pos) {
-		position = pos;
-		label = "q" + std::to_string(number);
-	}
-
-	void draw() {
-		const int fontSize = 14;
-
-		int textW = MeasureText(label.c_str(), fontSize);
-		int textH = fontSize;
-
-		int textX = position.x - textW / 2;
-		int textY = position.y - textH / 2;
-
-		DrawCircleV(position, 20, LIGHTGRAY);
-		DrawText(label.c_str(), textX, textY, fontSize, BLACK);
-	}
 };
 
 int main() {
@@ -73,7 +50,7 @@ int main() {
 		}
 
 		for (State s : states) {
-			s.draw();
+			draw_state(s);
 		}
 
 		EndDrawing();
