@@ -3,10 +3,11 @@
 
 #include <raylib.h>
 
-#include "finite_automaton/core.h"
-
-#include <optional>
 #include <memory>
+#include <optional>
+#include <unordered_map>
+
+#include "finite_automaton/core.h"
 
 enum Tools {
   TOOL_STATE = KEY_ONE,
@@ -21,10 +22,15 @@ class FiniteAutomatonCanvas {
   void draw();
 
  private:
+  std::unordered_map<std::shared_ptr<State>, Vector2> state_positions;
   std::optional<std::shared_ptr<State>> transition_from = std::nullopt;
   std::optional<std::shared_ptr<State>> moving_state = std::nullopt;
+
   Tools tool = TOOL_STATE;
   FiniteAutomaton fa;
+
+  void draw_state(std::shared_ptr<State> state);
+  void draw_transition(Transition);
 };
 
 #endif /* _KFLAP_FINITE_AUTOMATON_RENDERER_H_ */

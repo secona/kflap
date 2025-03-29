@@ -1,19 +1,23 @@
+#include "finite_automaton/canvas.h"
+
+#include <raylib.h>
+
 #include <cmath>
 
-#include "finite_automaton/canvas.h"
 #include "finite_automaton/core.h"
 
-void draw_state(State state) {
+void FiniteAutomatonCanvas::draw_state(std::shared_ptr<State> state) {
   const int fontSize = 14;
+  Vector2 position = state_positions[state];
 
-  float textW = MeasureText(state.label.c_str(), fontSize);
+  float textW = MeasureText(state->label.c_str(), fontSize);
   float textH = fontSize;
 
-  int textX = state.position.x - textW / 2;
-  int textY = state.position.y - textH / 2;
+  int textX = position.x - textW / 2;
+  int textY = position.y - textH / 2;
 
-  DrawCircleV(state.position, 20, LIGHTGRAY);
-  DrawText(state.label.c_str(), textX, textY, fontSize, BLACK);
+  DrawCircleV(position, 20, LIGHTGRAY);
+  DrawText(state->label.c_str(), textX, textY, fontSize, BLACK);
 }
 
 void draw_arrow(Vector2 from, Vector2 to) {
@@ -35,18 +39,19 @@ void draw_arrow(Vector2 from, Vector2 to) {
   DrawLineEx(to, Vector2{right_x, right_y}, 2, BLACK);
 }
 
-void draw_transition(Transition t) {
-  Vector2 from = t.from.lock()->position;
-  Vector2 to = t.to.lock()->position;
+void FiniteAutomatonCanvas::draw_transition(Transition t) {
+  Vector2 from = state_positions[t.from.lock()];
+  Vector2 to = state_positions[t.to.lock()];
 
   draw_arrow(from, to);
 
   char text[] = {t.c, 0};
-  DrawText(text, from.x + (to.x-from.x)/2, from.y + (to.y-from.y)/2, 14, BLACK);
+  DrawText(text, from.x + (to.x - from.x) / 2, from.y + (to.y - from.y) / 2, 14,
+           BLACK);
 }
 
 FiniteAutomatonCanvas::FiniteAutomatonCanvas()
-    : transition_from(), moving_state(), fa() {}
+    : state_positions(), transition_from(), moving_state(), fa() {}
 
 void FiniteAutomatonCanvas::run() {
   if (IsKeyPressed(TOOL_STATE)) tool = TOOL_STATE;
@@ -60,14 +65,17 @@ void FiniteAutomatonCanvas::run() {
   switch (tool) {
     case TOOL_STATE:
       if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        fa.add_state(GetMousePosition());
+        std::shared_ptr<State> state = fa.add_state();
+        state_positions[state] = GetMousePosition();
       }
 
       if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
         for (size_t i = 0; i < fa.states.size(); i++) {
           std::shared_ptr<State> s = fa.states[i];
-          if (CheckCollisionPointCircle(GetMousePosition(), s->position, 20)) {
+          if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s],
+                                        20)) {
             fa.remove_state(s);
+            state_positions.erase(s);
           }
         }
       }
@@ -77,7 +85,8 @@ void FiniteAutomatonCanvas::run() {
       if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         for (size_t i = 0; i < fa.states.size(); i++) {
           std::shared_ptr<State> s = fa.states[i];
-          if (CheckCollisionPointCircle(GetMousePosition(), s->position, 20)) {
+          if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s],
+                                        20)) {
             transition_from = s;
           }
         }
@@ -87,7 +96,8 @@ void FiniteAutomatonCanvas::run() {
         if (transition_from.has_value())
           for (size_t i = 0; i < fa.states.size(); i++) {
             std::shared_ptr<State> s = fa.states[i];
-            if (CheckCollisionPointCircle(GetMousePosition(), s->position, 20)) {
+            if (CheckCollisionPointCircle(GetMousePosition(),
+                                          state_positions[s], 20)) {
               fa.add_transition(transition_from.value(), s);
             }
           }
@@ -96,8 +106,7 @@ void FiniteAutomatonCanvas::run() {
       }
 
       if (transition_from.has_value()) {
-        State start = *transition_from.value();
-        draw_arrow(start.position, GetMousePosition());
+        draw_arrow(state_positions[*transition_from], GetMousePosition());
       }
 
       break;
@@ -106,14 +115,15 @@ void FiniteAutomatonCanvas::run() {
       if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         for (size_t i = 0; i < fa.states.size(); i++) {
           std::shared_ptr<State> s = fa.states[i];
-          if (CheckCollisionPointCircle(GetMousePosition(), s->position, 20)) {
+          if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s],
+                                        20)) {
             moving_state = s;
           }
         }
       }
 
       if (moving_state.has_value()) {
-        moving_state->get()->position = GetMousePosition();
+        state_positions[*moving_state] = GetMousePosition();
       }
 
       if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
@@ -130,7 +140,7 @@ void FiniteAutomatonCanvas::run() {
 
 void FiniteAutomatonCanvas::draw() {
   for (auto s : fa.states) {
-    draw_state(*s);
+    draw_state(s);
   }
 
   for (auto t = fa.transitions.begin(); t != fa.transitions.end();) {

@@ -3,16 +3,15 @@
 
 #include <raylib.h>
 
-#include <string>
 #include <memory>
+#include <string>
 #include <vector>
 
 class State {
  public:
   std::string label;
-  Vector2 position;
 
-  State(size_t, Vector2);
+  State(size_t);
 };
 
 class Transition {
@@ -31,7 +30,7 @@ class FiniteAutomaton {
   size_t state_count;
 
   FiniteAutomaton();
-  void add_state(Vector2 position);
+  std::shared_ptr<State> add_state();
   void remove_state(std::shared_ptr<State>);
   void add_transition(std::shared_ptr<State> from, std::shared_ptr<State> to);
 };
