@@ -5,12 +5,25 @@
 
   outputs = { nixpkgs ,... }: let
     system = "x86_64-linux";
+
+    pkgs = import nixpkgs {
+      inherit system;
+    };
+
+    kflap = pkgs.stdenv.mkDerivation {
+      name = "kflap";
+
+      buildInputs = with pkgs; [
+        raylib
+        meson
+        ninja
+        pkg-config
+      ];
+    };
   in {
-    devShells."${system}".default = let
-      pkgs = import nixpkgs {
-        inherit system;
-      };
-    in pkgs.mkShell {
+    devShells."${system}".default = pkgs.mkShell {
+      inputsFrom = [kflap];
+
       packages = [
         pkgs.libGL
 
