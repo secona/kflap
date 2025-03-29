@@ -11,8 +11,7 @@ enum Tools {
 };
 
 int main() {
-  int stateCount = 0;
-  std::vector<State> states;
+  FiniteAutomaton fa;
 
   Tools tool = TOOL_STATE;
 
@@ -32,16 +31,14 @@ int main() {
     switch (tool) {
       case TOOL_STATE:
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-          State s(stateCount, GetMousePosition());
-          states.push_back(s);
-          stateCount++;
+          fa.add_state(GetMousePosition());
         }
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-          for (size_t i = 0; i < states.size(); i++) {
-            State s = states[i];
-            if (CheckCollisionPointCircle(GetMousePosition(), s.position, 20)) {
-              states.erase(states.begin() + i);
+          for (size_t i = 0; i < fa.states.size(); i++) {
+            std::shared_ptr<State> s = fa.states[i];
+            if (CheckCollisionPointCircle(GetMousePosition(), s->position, 20)) {
+              fa.remove_state(s);
             }
           }
         }
@@ -50,8 +47,8 @@ int main() {
       case TOOL_TRANSITION:;
     }
 
-    for (State s : states) {
-      draw_state(s);
+    for (auto s : fa.states) {
+      draw_state(*s);
     }
 
     EndDrawing();
