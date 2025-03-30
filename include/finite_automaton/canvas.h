@@ -9,27 +9,27 @@
 #include "finite_automaton/core.h"
 
 enum Tools {
-  TOOL_STATE = KEY_ONE,
-  TOOL_TRANSITION = KEY_TWO,
-  TOOL_MOVE = KEY_THREE,
+    TOOL_STATE = KEY_ONE,
+    TOOL_TRANSITION = KEY_TWO,
+    TOOL_MOVE = KEY_THREE,
 };
 
 class FiniteAutomatonCanvas {
 public:
-  FiniteAutomatonCanvas();
-  void run();
-  void draw();
+    FiniteAutomatonCanvas();
+    void run();
+    void draw();
 
 private:
-  std::unordered_map<std::shared_ptr<State>, Vector2> state_positions;
-  std::optional<std::shared_ptr<State>> transition_from;
-  std::optional<std::shared_ptr<State>> moving_state;
+    std::unordered_map<std::shared_ptr<State>, Vector2> state_positions;
+    std::optional<std::shared_ptr<State>> transition_from;
+    std::optional<std::shared_ptr<State>> moving_state;
 
-  Tools tool;
-  FiniteAutomatonCore fa;
+    Tools tool;
+    FiniteAutomatonCore fa;
 
-  void draw_state(std::shared_ptr<State> state);
-  void draw_transition(Transition);
+    void draw_state(std::shared_ptr<State> state);
+    void draw_transition(Transition);
 };
 
 #endif /* _KFLAP_FINITE_AUTOMATON_RENDERER_H_ */

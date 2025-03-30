@@ -18,7 +18,7 @@
         meson
         ninja
         pkg-config
-        clang-tools
+        llvmPackages_20.clang-tools
       ];
     };
   in {

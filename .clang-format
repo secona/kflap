@@ -1,1 +1,13 @@
 BasedOnStyle: llvm
+
+AccessModifierOffset: -4
+IndentWidth: 4
+
+BreakBeforeBraces: WebKit
+BreakConstructorInitializers: BeforeComma
+
+AlignAfterOpenBracket: AlwaysBreak
+BinPackArguments: false
+AllowAllArgumentsOnNextLine: false
+BinPackParameters: false
+AllowAllParametersOfDeclarationOnNextLine: false
