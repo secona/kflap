@@ -4,11 +4,13 @@ raylib_dep = dependency('raylib')
 
 include_dir = include_directories('include')
 
-src_files = []
+kflap_src = []
 
 subdir('src')
 
-executable('kflap', src_files,
+executable(
+  'kflap',
+  kflap_src,
   dependencies: raylib_dep,
   include_directories: include_dir,
 )

@@ -1,4 +1,4 @@
 main_src = files('main.cpp')
-src_files += main_src
+kflap_src += main_src
 
 subdir('finite_automaton')
