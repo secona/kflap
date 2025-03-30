@@ -7,9 +7,11 @@
 
 class State {
 public:
-    std::string label;
+    size_t id;
+    std::string name;
+    bool final;
 
-    State(size_t);
+    State(size_t id);
 };
 
 class Transition {

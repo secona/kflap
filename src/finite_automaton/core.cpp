@@ -6,8 +6,10 @@
 #include <memory>
 #include <string>
 
-State::State(size_t number)
-    : label("q" + std::to_string(number))
+State::State(size_t id)
+    : id(id)
+    , name("q" + std::to_string(id))
+    , final(false)
 {
 }
 
