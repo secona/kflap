@@ -1,12 +1,14 @@
 BasedOnStyle: llvm
 
+ColumnLimit: 120
+
 AccessModifierOffset: -4
 IndentWidth: 4
 
 BreakBeforeBraces: WebKit
 BreakConstructorInitializers: BeforeComma
 
-AlignAfterOpenBracket: AlwaysBreak
+AlignAfterOpenBracket: Align
 BinPackArguments: false
 AllowAllArgumentsOnNextLine: false
 BinPackParameters: false

@@ -30,17 +30,13 @@ void draw_arrow(Vector2 from, Vector2 to)
     double angle = std::atan2(to.y - from.y, to.x - from.x);
 
     Vector2 left = {
-        static_cast<float>(
-            to.x - std::cos(angle + ARROW_HEAD_ANGLE) * ARROW_HEAD_LENGTH),
-        static_cast<float>(
-            to.y - std::sin(angle + ARROW_HEAD_ANGLE) * ARROW_HEAD_LENGTH),
+        static_cast<float>(to.x - std::cos(angle + ARROW_HEAD_ANGLE) * ARROW_HEAD_LENGTH),
+        static_cast<float>(to.y - std::sin(angle + ARROW_HEAD_ANGLE) * ARROW_HEAD_LENGTH),
     };
 
     Vector2 right = {
-        static_cast<float>(
-            to.x - std::cos(angle - ARROW_HEAD_ANGLE) * ARROW_HEAD_LENGTH),
-        static_cast<float>(
-            to.y - std::sin(angle - ARROW_HEAD_ANGLE) * ARROW_HEAD_LENGTH),
+        static_cast<float>(to.x - std::cos(angle - ARROW_HEAD_ANGLE) * ARROW_HEAD_LENGTH),
+        static_cast<float>(to.y - std::sin(angle - ARROW_HEAD_ANGLE) * ARROW_HEAD_LENGTH),
     };
 
     DrawLineEx(from, to, 2, BLACK);
@@ -58,17 +54,15 @@ void FiniteAutomatonCanvas::draw()
         draw_state(s);
     }
 
-    fa.transitions.erase(
-        std::remove_if(
-            fa.transitions.begin(),
-            fa.transitions.end(),
-            [this](const Transition &t) {
-                if (t.to.expired() || t.from.expired())
-                    return true;
-                draw_transition(t);
-                return false;
-            }),
-        fa.transitions.end());
+    fa.transitions.erase(std::remove_if(fa.transitions.begin(),
+                                        fa.transitions.end(),
+                                        [this](const Transition &t) {
+                                            if (t.to.expired() || t.from.expired())
+                                                return true;
+                                            draw_transition(t);
+                                            return false;
+                                        }),
+                         fa.transitions.end());
 }
 
 void FiniteAutomatonCanvas::draw_state(std::shared_ptr<State> state)
@@ -93,12 +87,7 @@ void FiniteAutomatonCanvas::draw_transition(Transition t)
     draw_arrow(from, to);
 
     char text[] = {t.c, 0};
-    DrawText(
-        text,
-        from.x + (to.x - from.x) / 2,
-        from.y + (to.y - from.y) / 2,
-        14,
-        BLACK);
+    DrawText(text, from.x + (to.x - from.x) / 2, from.y + (to.y - from.y) / 2, 14, BLACK);
 }
 
 // ============================================================================
@@ -136,10 +125,7 @@ void FiniteAutomatonCanvas::run()
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
             for (auto &s : fa.states) {
-                if (CheckCollisionPointCircle(
-                        GetMousePosition(),
-                        state_positions[s],
-                        20)) {
+                if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s], 20)) {
                     fa.remove_state(s);
                     state_positions.erase(s);
                 }
@@ -150,10 +136,7 @@ void FiniteAutomatonCanvas::run()
     case TOOL_TRANSITION:
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             for (auto &s : fa.states) {
-                if (CheckCollisionPointCircle(
-                        GetMousePosition(),
-                        state_positions[s],
-                        20)) {
+                if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s], 20)) {
                     transition_from = s;
                 }
             }
@@ -162,10 +145,7 @@ void FiniteAutomatonCanvas::run()
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
             if (transition_from.has_value())
                 for (auto &s : fa.states) {
-                    if (CheckCollisionPointCircle(
-                            GetMousePosition(),
-                            state_positions[s],
-                            20)) {
+                    if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s], 20)) {
                         fa.add_transition(transition_from.value(), s);
                     }
                 }
@@ -182,10 +162,7 @@ void FiniteAutomatonCanvas::run()
     case TOOL_MOVE:
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             for (auto &s : fa.states) {
-                if (CheckCollisionPointCircle(
-                        GetMousePosition(),
-                        state_positions[s],
-                        20)) {
+                if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s], 20)) {
                     moving_state = s;
                 }
             }
