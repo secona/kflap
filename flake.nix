@@ -41,6 +41,9 @@
         pkgs.wayland-protocols
         pkgs.libxkbcommon
         pkgs.glfw-wayland
+
+        # Test
+        pkgs.gtest
       ];
     };
   };

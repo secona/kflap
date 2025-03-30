@@ -1,6 +1,8 @@
 project('kflap', 'cpp', default_options: ['cpp_std=c++23', 'optimization=2'])
 
 raylib_dep = dependency('raylib')
+gtest_dep = dependency('gtest')
+gtest_main_dep = dependency('gtest_main')
 
 include_dir = include_directories('include')
 
