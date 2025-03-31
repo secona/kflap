@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 // ============================================================================
 // State Implementation
@@ -32,7 +33,9 @@ size_t FiniteAutomatonCore::add_state()
 {
     size_t id = state_counter++;
     auto state = std::make_shared<State>(id);
+
     states.emplace(id, state);
+    transitions.emplace(id, std::vector<size_t>());
 
     return id;
 }
@@ -59,4 +62,25 @@ void FiniteAutomatonCore::remove_state(size_t state_id)
 
 void FiniteAutomatonCore::add_transition(size_t from_id, size_t to_id)
 {
+    auto transition = transitions.find(from_id);
+
+    if (transition == transitions.end())
+        return;
+
+    transition->second.push_back(to_id);
+}
+
+std::optional<std::vector<size_t>> FiniteAutomatonCore::get_transitions(size_t state_id)
+{
+    auto transition = transitions.find(state_id);
+
+    if (transition == transitions.end())
+        return std::nullopt;
+
+    return transition->second;
+}
+
+size_t FiniteAutomatonCore::transitions_count()
+{
+    return transitions.size();
 }

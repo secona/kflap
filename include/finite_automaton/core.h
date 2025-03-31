@@ -39,7 +39,10 @@ public:
     size_t states_count();
     std::optional<std::shared_ptr<State>> get_state(size_t state_id);
     void remove_state(size_t state_id);
+
     void add_transition(size_t from_id, size_t to_id);
+    std::optional<std::vector<size_t>> get_transitions(size_t state_id);
+    size_t transitions_count();
 };
 
 #endif /* _KFLAP_FINITE_AUTOMATON_CORE_H_ */
