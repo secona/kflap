@@ -5,6 +5,7 @@
 #include <optional>
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 class State {
@@ -31,7 +32,7 @@ private:
 
 public:
     std::unordered_map<size_t, std::shared_ptr<State>> states;
-    std::unordered_map<size_t, std::vector<size_t>> transitions;
+    std::unordered_map<size_t, std::vector<std::pair<size_t, char>>> transitions;
 
     FiniteAutomatonCore();
 
@@ -40,8 +41,8 @@ public:
     std::optional<std::shared_ptr<State>> get_state(size_t state_id);
     void remove_state(size_t state_id);
 
-    void add_transition(size_t from_id, size_t to_id);
-    std::optional<std::vector<size_t>> get_transitions(size_t state_id);
+    void add_transition(size_t from_id, size_t to_id, char c);
+    std::optional<std::vector<std::pair<size_t, char>>> get_transitions(size_t state_id);
     size_t transitions_count();
 };
 

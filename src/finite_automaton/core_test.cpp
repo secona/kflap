@@ -50,8 +50,9 @@ TEST_F(FiniteAutomatonTests, AddTransition)
     auto state2 = fac.get_state(state_id2);
     EXPECT_EQ(state2->get()->id, 1);
 
-    fac.add_transition(state_id1, state_id2);
+    fac.add_transition(state_id1, state_id2, 'a');
     auto transitions = fac.get_transitions(state_id1);
     EXPECT_EQ(transitions->size(), 1);
-    EXPECT_EQ(transitions->at(0), state_id2);
+    EXPECT_EQ(transitions->at(0).first, state_id2);
+    EXPECT_EQ(transitions->at(0).second, 'a');
 }

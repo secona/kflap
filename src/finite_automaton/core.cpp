@@ -35,7 +35,7 @@ size_t FiniteAutomatonCore::add_state()
     auto state = std::make_shared<State>(id);
 
     states.emplace(id, state);
-    transitions.emplace(id, std::vector<size_t>());
+    transitions.emplace(id, std::vector<std::pair<size_t, char>>());
 
     return id;
 }
@@ -60,17 +60,17 @@ void FiniteAutomatonCore::remove_state(size_t state_id)
     states.erase(state_id);
 }
 
-void FiniteAutomatonCore::add_transition(size_t from_id, size_t to_id)
+void FiniteAutomatonCore::add_transition(size_t from_id, size_t to_id, char c)
 {
     auto transition = transitions.find(from_id);
 
     if (transition == transitions.end())
         return;
 
-    transition->second.push_back(to_id);
+    transition->second.emplace_back(to_id, c);
 }
 
-std::optional<std::vector<size_t>> FiniteAutomatonCore::get_transitions(size_t state_id)
+std::optional<std::vector<std::pair<size_t, char>>> FiniteAutomatonCore::get_transitions(size_t state_id)
 {
     auto transition = transitions.find(state_id);
 
