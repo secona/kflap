@@ -24,6 +24,7 @@
         pkg-config
         gtest
         clang-tools
+        pugixml
       ];
 
       buildPhase = ''
