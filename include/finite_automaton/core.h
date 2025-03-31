@@ -2,7 +2,9 @@
 #define _KFLAP_FINITE_AUTOMATON_CORE_H_
 
 #include <memory>
+#include <optional>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 class State {
@@ -24,15 +26,20 @@ public:
 };
 
 class FiniteAutomatonCore {
+private:
+    size_t state_counter;
+
 public:
-    std::vector<std::shared_ptr<State>> states;
-    std::vector<Transition> transitions;
-    size_t state_count;
+    std::unordered_map<size_t, std::shared_ptr<State>> states;
+    std::unordered_map<size_t, std::vector<size_t>> transitions;
 
     FiniteAutomatonCore();
-    std::shared_ptr<State> add_state();
-    void remove_state(std::shared_ptr<State>);
-    void add_transition(std::shared_ptr<State> from, std::shared_ptr<State> to);
+
+    size_t add_state();
+    size_t states_count();
+    std::optional<std::shared_ptr<State>> get_state(size_t state_id);
+    void remove_state(size_t state_id);
+    void add_transition(size_t from_id, size_t to_id);
 };
 
 #endif /* _KFLAP_FINITE_AUTOMATON_CORE_H_ */

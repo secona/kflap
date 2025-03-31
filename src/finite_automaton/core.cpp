@@ -1,10 +1,14 @@
 #include "finite_automaton/core.h"
 
+#include <optional>
 #include <raylib.h>
 
-#include <algorithm>
 #include <memory>
 #include <string>
+
+// ============================================================================
+// State Implementation
+// ============================================================================
 
 State::State(size_t id)
     : id(id)
@@ -13,34 +17,46 @@ State::State(size_t id)
 {
 }
 
-Transition::Transition(std::shared_ptr<State> from, std::shared_ptr<State> to)
-    : from(from)
-    , to(to)
-    , c('a')
-{
-}
+// ============================================================================
+// FiniteAutomatonCore Implementation
+// ============================================================================
 
 FiniteAutomatonCore::FiniteAutomatonCore()
-    : states()
+    : state_counter(0)
+    , states()
     , transitions()
-    , state_count(0)
 {
 }
 
-std::shared_ptr<State> FiniteAutomatonCore::add_state()
+size_t FiniteAutomatonCore::add_state()
 {
-    auto state = std::make_shared<State>(state_count++);
-    states.emplace_back(state);
+    size_t id = state_counter++;
+    auto state = std::make_shared<State>(id);
+    states.emplace(id, state);
 
-    return state;
+    return id;
 }
 
-void FiniteAutomatonCore::remove_state(std::shared_ptr<State> state)
+size_t FiniteAutomatonCore::states_count()
 {
-    states.erase(std::remove(states.begin(), states.end(), state), states.end());
+    return states.size();
 }
 
-void FiniteAutomatonCore::add_transition(std::shared_ptr<State> from, std::shared_ptr<State> to)
+std::optional<std::shared_ptr<State>> FiniteAutomatonCore::get_state(size_t state_id)
 {
-    transitions.emplace_back(from, to);
+    auto state = states.find(state_id);
+
+    if (state == states.end())
+        return std::nullopt;
+
+    return state->second;
+}
+
+void FiniteAutomatonCore::remove_state(size_t state_id)
+{
+    states.erase(state_id);
+}
+
+void FiniteAutomatonCore::add_transition(size_t from_id, size_t to_id)
+{
 }

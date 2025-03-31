@@ -13,3 +13,5 @@ BinPackArguments: false
 AllowAllArgumentsOnNextLine: false
 BinPackParameters: false
 AllowAllParametersOfDeclarationOnNextLine: false
+
+AllowShortFunctionsOnASingleLine: false

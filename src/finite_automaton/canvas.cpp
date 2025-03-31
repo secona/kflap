@@ -1,6 +1,6 @@
 #include "finite_automaton/canvas.h"
 
-#include <algorithm>
+// #include <algorithm>
 #include <optional>
 #include <raylib.h>
 
@@ -51,18 +51,18 @@ void draw_arrow(Vector2 from, Vector2 to)
 void FiniteAutomatonCanvas::draw()
 {
     for (auto s : fa.states) {
-        draw_state(s);
+        // draw_state(s);
     }
 
-    fa.transitions.erase(std::remove_if(fa.transitions.begin(),
-                                        fa.transitions.end(),
-                                        [this](const Transition &t) {
-                                            if (t.to.expired() || t.from.expired())
-                                                return true;
-                                            draw_transition(t);
-                                            return false;
-                                        }),
-                         fa.transitions.end());
+    // fa.transitions.erase(std::remove_if(fa.transitions.begin(),
+    //                                     fa.transitions.end(),
+    //                                     [this](const Transition &t) {
+    //                                         if (t.to.expired() || t.from.expired())
+    //                                             return true;
+    //                                         draw_transition(t);
+    //                                         return false;
+    //                                     }),
+    //                      fa.transitions.end());
 }
 
 void FiniteAutomatonCanvas::draw_state(std::shared_ptr<State> state)
@@ -119,38 +119,38 @@ void FiniteAutomatonCanvas::run()
     switch (tool) {
     case TOOL_STATE:
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            std::shared_ptr<State> state = fa.add_state();
-            state_positions[state] = GetMousePosition();
+            // std::shared_ptr<State> state = fa.add_state();
+            // state_positions[state] = GetMousePosition();
         }
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-            for (auto &s : fa.states) {
-                if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s], 20)) {
-                    fa.remove_state(s);
-                    state_positions.erase(s);
-                }
-            }
+            // for (auto &s : fa.states) {
+            //     if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s], 20)) {
+            //         fa.remove_state(s);
+            //         state_positions.erase(s);
+            //     }
+            // }
         }
         break;
 
     case TOOL_TRANSITION:
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            for (auto &s : fa.states) {
-                if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s], 20)) {
-                    transition_from = s;
-                }
-            }
+            // for (auto &s : fa.states) {
+            //     if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s], 20)) {
+            //         transition_from = s;
+            //     }
+            // }
         }
 
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
             if (transition_from.has_value())
-                for (auto &s : fa.states) {
-                    if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s], 20)) {
-                        fa.add_transition(transition_from.value(), s);
-                    }
-                }
+                // for (auto &s : fa.states) {
+                //     if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s], 20)) {
+                //         fa.add_transition(transition_from.value(), s);
+                //     }
+                // }
 
-            transition_from.reset();
+                transition_from.reset();
         }
 
         if (transition_from.has_value()) {
@@ -161,11 +161,11 @@ void FiniteAutomatonCanvas::run()
 
     case TOOL_MOVE:
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            for (auto &s : fa.states) {
-                if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s], 20)) {
-                    moving_state = s;
-                }
-            }
+            // for (auto &s : fa.states) {
+            //     if (CheckCollisionPointCircle(GetMousePosition(), state_positions[s], 20)) {
+            //         moving_state = s;
+            //     }
+            // }
         }
 
         if (moving_state.has_value()) {
