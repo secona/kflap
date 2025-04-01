@@ -32,7 +32,7 @@ public:
     // =========================================================================
 
     FiniteAutomatonCore();
-    static FiniteAutomatonCore from_jff(std::string filename);
+    FiniteAutomatonCore(std::string file);
 
     // =========================================================================
     // Getter Methods

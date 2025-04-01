@@ -1,7 +1,6 @@
 #include "finite_automaton/core.h"
 
 #include <cstdlib>
-#include <iostream>
 #include <optional>
 #include <pugixml.hpp>
 #include <raylib.h>
@@ -22,16 +21,10 @@ FiniteAutomatonCore::FiniteAutomatonCore()
 {
 }
 
-FiniteAutomatonCore FiniteAutomatonCore::from_jff(std::string filename)
+FiniteAutomatonCore::FiniteAutomatonCore(std::string content)
 {
-    FiniteAutomatonCore fac;
-
     pugi::xml_document doc;
-
-    if (!doc.load_file(filename.c_str())) {
-        std::cerr << "Failed to load_file\n";
-        throw 1;
-    }
+    doc.load_string(content.c_str());
 
     pugi::xml_node automaton = doc.child("structure").child("automaton");
 
@@ -40,10 +33,10 @@ FiniteAutomatonCore FiniteAutomatonCore::from_jff(std::string filename)
         std::string name = state.attribute("name").as_string();
         bool isfinal = state.child("final");
 
-        fac.add_state(state_id, name, isfinal);
+        add_state(state_id, name, isfinal);
 
         if (state.child("initial"))
-            fac.initial_state = state_id;
+            initial_state = state_id;
     }
 
     for (pugi::xml_node transition = automaton.child("transition"); transition;
@@ -52,10 +45,8 @@ FiniteAutomatonCore FiniteAutomatonCore::from_jff(std::string filename)
         size_t to = transition.child("to").text().as_int();
         std::string read = transition.child("read").text().as_string();
 
-        fac.add_transition(from, to, read.empty() ? std::nullopt : std::make_optional(read));
+        add_transition(from, to, read.empty() ? std::nullopt : std::make_optional(read));
     }
-
-    return fac;
 }
 
 // ============================================================================
