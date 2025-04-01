@@ -153,19 +153,3 @@ size_t FiniteAutomatonCore::transitions_count()
 
     return sum;
 }
-
-bool FiniteAutomatonCore::simulate(std::string input)
-{
-    size_t current = initial_state;
-
-    for (const auto& ch : input) {
-        for (const auto& [state_id, c] : transitions[current]) {
-            if (ch == c) {
-                current = state_id;
-                break;
-            }
-        }
-    }
-
-    return states[current]->final;
-}
