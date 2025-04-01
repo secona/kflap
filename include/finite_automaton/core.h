@@ -50,6 +50,8 @@ public:
     void add_transition(size_t from_id, size_t to_id, char c);
     std::optional<std::vector<std::pair<size_t, char>>> get_transitions(size_t state_id);
     size_t transitions_count();
+
+    bool simulate(std::string input);
 };
 
 #endif /* _KFLAP_FINITE_AUTOMATON_CORE_H_ */

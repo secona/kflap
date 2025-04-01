@@ -56,7 +56,7 @@ FiniteAutomatonCore FiniteAutomatonCore::from_jff(std::string filename)
     for (pugi::xml_node state = automaton.child("state"); state; state = state.next_sibling("state")) {
         size_t state_id = (size_t)state.attribute("id").as_int();
         std::string name = state.attribute("name").as_string();
-        bool isfinal = state.attribute("final").as_bool();
+        bool isfinal = state.child("final");
 
         fac.add_state(state_id, name, isfinal);
 
@@ -152,4 +152,20 @@ size_t FiniteAutomatonCore::transitions_count()
         sum += t.second.size();
 
     return sum;
+}
+
+bool FiniteAutomatonCore::simulate(std::string input)
+{
+    size_t current = initial_state;
+
+    for (const auto& ch : input) {
+        for (const auto& [state_id, c] : transitions[current]) {
+            if (ch == c) {
+                current = state_id;
+                break;
+            }
+        }
+    }
+
+    return states[current]->final;
 }

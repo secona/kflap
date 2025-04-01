@@ -64,3 +64,13 @@ TEST(FiniteAutomatonJFF, CanParseJFF)
     EXPECT_EQ(fac.states_count(), 7);
     EXPECT_EQ(fac.transitions_count(), 21);
 }
+
+TEST(FiniteAutomatonJFF, CanSimulateDFA)
+{
+    FiniteAutomatonCore fac = FiniteAutomatonCore::from_jff("examples/DFA.jff");
+    EXPECT_TRUE(fac.simulate("cbccab"));
+    EXPECT_TRUE(fac.simulate("cbccabababcbacbabcacb"));
+    EXPECT_FALSE(fac.simulate("cbcca"));
+    EXPECT_FALSE(fac.simulate("cbccac"));
+    EXPECT_FALSE(fac.simulate("cbccad"));
+}
