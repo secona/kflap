@@ -9,13 +9,26 @@
 #include <vector>
 
 class State {
-public:
+private:
     size_t id;
     std::string name;
-    bool final;
+    bool is_final;
+
+public:
+    // =========================================================================
+    // Constructors
+    // =========================================================================
 
     State(size_t id);
     State(size_t id, std::string name, bool final);
+
+    // =========================================================================
+    // Getter Methods
+    // =========================================================================
+
+    const size_t &get_id() const;
+    const std::string &get_name() const;
+    const bool &get_is_final() const;
 };
 
 class FiniteAutomatonCore {

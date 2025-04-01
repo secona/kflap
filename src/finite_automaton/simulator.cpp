@@ -45,8 +45,8 @@ bool FiniteAutomatonSimulator::is_accepted()
 {
     auto states = fac.get_states();
 
-    for (const auto& state_id : current_states) {
-        if (states.at(state_id)->final)
+    for (const auto &state_id : current_states) {
+        if (states.at(state_id)->get_is_final())
             return true;
     }
 

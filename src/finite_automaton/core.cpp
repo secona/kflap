@@ -17,16 +17,35 @@
 State::State(size_t id)
     : id(id)
     , name("q" + std::to_string(id))
-    , final(false)
+    , is_final(false)
 {
 }
 
 State::State(size_t id, std::string name, bool final)
     : id(id)
     , name(name)
-    , final(final)
+    , is_final(final)
 {
 }
+
+// ============================================================================
+// State Getter Methods
+// ============================================================================
+
+const size_t &State::get_id() const
+{
+    return id;
+};
+
+const std::string &State::get_name() const
+{
+    return name;
+};
+
+const bool &State::get_is_final() const
+{
+    return is_final;
+};
 
 // ============================================================================
 // FiniteAutomatonCore Constructors
