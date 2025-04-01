@@ -2,11 +2,12 @@
 #define _KFLAP_FINITE_AUTOMATON_SIMULATOR_H_
 
 #include "finite_automaton/core.h"
+#include <vector>
 
 class FiniteAutomatonSimulator {
 private:
     const FiniteAutomatonCore &fac;
-    size_t current_state;
+    std::vector<size_t> current_states;
 
 public:
     // =========================================================================
@@ -19,7 +20,7 @@ public:
     // Getter Methods
     // =========================================================================
 
-    const State &get_current_state() const;
+    const std::vector<size_t> &get_current_states() const;
 
     // =========================================================================
     // Simulator Methods

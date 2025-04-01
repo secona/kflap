@@ -12,14 +12,17 @@ TEST_F(FiniteAutomatonSimulatorTests, Step)
     FiniteAutomatonSimulator fas(fac);
 
     fas.step('c');
-    EXPECT_EQ(fas.get_current_state().id, 1);
+    EXPECT_EQ(fas.get_current_states().size(), 1);
+    EXPECT_EQ(fas.get_current_states().at(0), 1);
     EXPECT_FALSE(fas.is_accepted());
 
     fas.step('b');
-    EXPECT_EQ(fas.get_current_state().id, 2);
+    EXPECT_EQ(fas.get_current_states().size(), 1);
+    EXPECT_EQ(fas.get_current_states().at(0), 2);
     EXPECT_FALSE(fas.is_accepted());
 
     fas.reset();
-    EXPECT_EQ(fas.get_current_state().id, 0);
+    EXPECT_EQ(fas.get_current_states().size(), 1);
+    EXPECT_EQ(fas.get_current_states().at(0), 0);
     EXPECT_FALSE(fas.is_accepted());
 }
