@@ -80,7 +80,7 @@ FiniteAutomatonCore FiniteAutomatonCore::from_jff(std::string filename)
 // FiniteAutomatonCore Methods
 // ============================================================================
 
-size_t FiniteAutomatonCore::get_initial_state()
+size_t FiniteAutomatonCore::get_initial_state() const
 {
     return initial_state;
 }

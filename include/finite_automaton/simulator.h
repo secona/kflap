@@ -8,7 +8,7 @@ public:
     FiniteAutomatonCore fac;
     size_t current_state;
 
-    FiniteAutomatonSimulator(FiniteAutomatonCore&& fac);
+    FiniteAutomatonSimulator(const FiniteAutomatonCore &fac);
 
     void step(char ch);
     void reset();

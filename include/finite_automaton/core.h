@@ -39,7 +39,7 @@ public:
     FiniteAutomatonCore();
     static FiniteAutomatonCore from_jff(std::string filename);
 
-    size_t get_initial_state();
+    size_t get_initial_state() const;
 
     size_t add_state();
     void add_state(size_t id, std::string name, bool final);

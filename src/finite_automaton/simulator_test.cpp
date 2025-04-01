@@ -9,7 +9,7 @@ protected:
 
 TEST_F(FiniteAutomatonSimulatorTests, Step)
 {
-    FiniteAutomatonSimulator fas(std::move(fac));
+    FiniteAutomatonSimulator fas(fac);
 
     fas.step('c');
     EXPECT_EQ(fas.current_state, 1);
