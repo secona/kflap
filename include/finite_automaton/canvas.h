@@ -29,7 +29,7 @@ private:
     FiniteAutomatonCore fa;
 
     void draw_state(std::shared_ptr<State> state);
-    void draw_transition(Transition);
+    // void draw_transition(Transition);
 };
 
 #endif /* _KFLAP_FINITE_AUTOMATON_RENDERER_H_ */

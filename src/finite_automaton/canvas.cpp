@@ -79,16 +79,16 @@ void FiniteAutomatonCanvas::draw_state(std::shared_ptr<State> state)
     DrawText(state->name.c_str(), textX, textY, FONT_SIZE, STATE_TEXT_COLOR);
 }
 
-void FiniteAutomatonCanvas::draw_transition(Transition t)
-{
-    Vector2 from = state_positions[t.from.lock()];
-    Vector2 to = state_positions[t.to.lock()];
-
-    draw_arrow(from, to);
-
-    char text[] = {t.c, 0};
-    DrawText(text, from.x + (to.x - from.x) / 2, from.y + (to.y - from.y) / 2, 14, BLACK);
-}
+// void FiniteAutomatonCanvas::draw_transition(Transition t)
+// {
+//     Vector2 from = state_positions[t.from.lock()];
+//     Vector2 to = state_positions[t.to.lock()];
+//
+//     draw_arrow(from, to);
+//
+//     char text[] = {t.c, 0};
+//     DrawText(text, from.x + (to.x - from.x) / 2, from.y + (to.y - from.y) / 2, 14, BLACK);
+// }
 
 // ============================================================================
 // START OF FiniteAutomatonCanvas IMPLEMENTATION

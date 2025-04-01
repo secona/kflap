@@ -18,15 +18,6 @@ public:
     State(size_t id, std::string name, bool final);
 };
 
-class Transition {
-public:
-    std::weak_ptr<State> from;
-    std::weak_ptr<State> to;
-    char c;
-
-    Transition(std::shared_ptr<State> from, std::shared_ptr<State> to);
-};
-
 class FiniteAutomatonCore {
 private:
     size_t state_counter;
