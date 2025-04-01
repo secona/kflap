@@ -87,12 +87,9 @@ FiniteAutomatonCore FiniteAutomatonCore::from_jff(std::string filename)
          transition = transition.next_sibling("transition")) {
         size_t from = transition.child("from").text().as_int();
         size_t to = transition.child("to").text().as_int();
-        char read = transition.child("read").text().as_string()[0];
+        std::string read = transition.child("read").text().as_string();
 
-        if (read == 0)
-            fac.add_transition(from, to, std::nullopt);
-        else
-            fac.add_transition(from, to, read);
+        fac.add_transition(from, to, read.empty() ? std::nullopt : std::make_optional(read));
     }
 
     return fac;
@@ -156,7 +153,7 @@ void FiniteAutomatonCore::remove_state(size_t state_id)
     states.erase(state_id);
 }
 
-void FiniteAutomatonCore::add_transition(size_t from_id, size_t to_id, std::optional<char> read)
+void FiniteAutomatonCore::add_transition(size_t from_id, size_t to_id, std::optional<std::string> read)
 {
     auto transition = transitions.find(from_id);
 

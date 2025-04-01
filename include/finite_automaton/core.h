@@ -32,7 +32,7 @@ public:
 
 struct Transition {
     size_t state_id;
-    std::optional<char> read;
+    std::optional<std::string> read;
 };
 
 class FiniteAutomatonCore {
@@ -73,7 +73,7 @@ public:
     // Transition Management Methods
     // =========================================================================
 
-    void add_transition(size_t from_id, size_t to_id, std::optional<char> read);
+    void add_transition(size_t from_id, size_t to_id, std::optional<std::string> read);
     std::optional<std::vector<Transition>> get_state_transitions(size_t state_id);
     size_t transitions_count();
 };

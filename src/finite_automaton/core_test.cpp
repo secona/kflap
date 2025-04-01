@@ -51,11 +51,11 @@ TEST_F(FiniteAutomatonTests, AddTransition)
     auto state2 = fac.get_state(state_id2);
     EXPECT_EQ(state2->get()->get_id(), 1);
 
-    fac.add_transition(state_id1, state_id2, 'a');
+    fac.add_transition(state_id1, state_id2, "a");
     auto transitions = fac.get_state_transitions(state_id1);
     EXPECT_EQ(transitions->size(), 1);
     EXPECT_EQ(transitions->at(0).state_id, state_id2);
-    EXPECT_EQ(transitions->at(0).read, 'a');
+    EXPECT_EQ(transitions->at(0).read, "a");
 }
 
 TEST(FiniteAutomatonJFF, CanParseJFF)

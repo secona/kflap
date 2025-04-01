@@ -32,7 +32,7 @@ void FiniteAutomatonSimulator::step(char ch)
 
     for (const auto &s : current_states) {
         for (const Transition &t : transitions[s]) {
-            if (ch == t.read) {
+            if (ch == t.read.value()[0]) {
                 new_states.push_back(t.state_id);
             }
         }
