@@ -26,3 +26,14 @@ TEST_F(FiniteAutomatonSimulatorTests, Step)
     EXPECT_EQ(fas.get_current_states().at(0), 0);
     EXPECT_FALSE(fas.is_accepted());
 }
+
+TEST_F(FiniteAutomatonSimulatorTests, StepNotInAlphabet)
+{
+    FiniteAutomatonSimulator fas(fac);
+
+    EXPECT_EQ(fas.get_current_states().size(), 1);
+
+    fas.step('x');
+    EXPECT_EQ(fas.get_current_states().size(), 0);
+    EXPECT_FALSE(fas.is_accepted());
+}
