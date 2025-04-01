@@ -31,9 +31,9 @@ void FiniteAutomatonSimulator::step(char ch)
     auto transitions = fac.get_transitions();
 
     for (const auto &s : current_states) {
-        for (const auto &[state_id, c] : transitions[s]) {
-            if (ch == c) {
-                new_states.push_back(state_id);
+        for (const Transition &t : transitions[s]) {
+            if (ch == t.read) {
+                new_states.push_back(t.state_id);
             }
         }
     }

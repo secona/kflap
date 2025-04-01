@@ -109,7 +109,7 @@ const std::unordered_map<size_t, std::shared_ptr<State>> &FiniteAutomatonCore::g
     return states;
 }
 
-const std::unordered_map<size_t, std::vector<std::pair<size_t, char>>> &FiniteAutomatonCore::get_transitions() const
+const std::unordered_map<size_t, std::vector<Transition>> &FiniteAutomatonCore::get_transitions() const
 {
     return transitions;
 }
@@ -120,7 +120,7 @@ size_t FiniteAutomatonCore::add_state()
     auto state = std::make_shared<State>(id);
 
     states.emplace(id, state);
-    transitions.emplace(id, std::vector<std::pair<size_t, char>>());
+    transitions.emplace(id, std::vector<Transition>());
 
     return id;
 }
@@ -130,7 +130,7 @@ void FiniteAutomatonCore::add_state(size_t id, std::string name, bool final)
     auto state = std::make_shared<State>(id, name, final);
 
     states.emplace(id, state);
-    transitions.emplace(id, std::vector<std::pair<size_t, char>>());
+    transitions.emplace(id, std::vector<Transition>());
 }
 
 size_t FiniteAutomatonCore::states_count()
@@ -163,7 +163,7 @@ void FiniteAutomatonCore::add_transition(size_t from_id, size_t to_id, char c)
     transition->second.emplace_back(to_id, c);
 }
 
-std::optional<std::vector<std::pair<size_t, char>>> FiniteAutomatonCore::get_transitions(size_t state_id)
+std::optional<std::vector<Transition>> FiniteAutomatonCore::get_state_transitions(size_t state_id)
 {
     auto transition = transitions.find(state_id);
 
