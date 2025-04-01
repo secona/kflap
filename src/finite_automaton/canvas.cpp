@@ -69,14 +69,14 @@ void FiniteAutomatonCanvas::draw_state(std::shared_ptr<State> state)
 {
     Vector2 position = state_positions[state];
 
-    float textW = MeasureText(state->get_name().c_str(), FONT_SIZE);
+    float textW = MeasureText(state->name.c_str(), FONT_SIZE);
     float textH = FONT_SIZE;
 
     int textX = position.x - textW / 2;
     int textY = position.y - textH / 2;
 
     DrawCircleV(position, STATE_RADIUS, STATE_COLOR);
-    DrawText(state->get_name().c_str(), textX, textY, FONT_SIZE, STATE_TEXT_COLOR);
+    DrawText(state->name.c_str(), textX, textY, FONT_SIZE, STATE_TEXT_COLOR);
 }
 
 // void FiniteAutomatonCanvas::draw_transition(Transition t)
