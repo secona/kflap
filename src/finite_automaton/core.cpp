@@ -80,9 +80,19 @@ FiniteAutomatonCore FiniteAutomatonCore::from_jff(std::string filename)
 // FiniteAutomatonCore Methods
 // ============================================================================
 
-size_t FiniteAutomatonCore::get_initial_state() const
+const size_t& FiniteAutomatonCore::get_initial_state() const
 {
     return initial_state;
+}
+
+const std::unordered_map<size_t, std::shared_ptr<State>>& FiniteAutomatonCore::get_states() const
+{
+    return states;
+}
+
+const std::unordered_map<size_t, std::vector<std::pair<size_t, char>>>& FiniteAutomatonCore::get_transitions() const
+{
+    return transitions;
 }
 
 size_t FiniteAutomatonCore::add_state()

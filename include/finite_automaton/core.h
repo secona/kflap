@@ -23,20 +23,38 @@ private:
     size_t state_counter;
     size_t initial_state;
 
-public:
     std::unordered_map<size_t, std::shared_ptr<State>> states;
     std::unordered_map<size_t, std::vector<std::pair<size_t, char>>> transitions;
+
+public:
+    // =========================================================================
+    // Constructors
+    // =========================================================================
 
     FiniteAutomatonCore();
     static FiniteAutomatonCore from_jff(std::string filename);
 
-    size_t get_initial_state() const;
+    // =========================================================================
+    // Getter Methods
+    // =========================================================================
+
+    const size_t& get_initial_state() const;
+    const std::unordered_map<size_t, std::shared_ptr<State>>& get_states() const;
+    const std::unordered_map<size_t, std::vector<std::pair<size_t, char>>>& get_transitions() const;
+
+    // =========================================================================
+    // State Management Methods
+    // =========================================================================
 
     size_t add_state();
     void add_state(size_t id, std::string name, bool final);
     size_t states_count();
     std::optional<std::shared_ptr<State>> get_state(size_t state_id);
     void remove_state(size_t state_id);
+
+    // =========================================================================
+    // Transition Management Methods
+    // =========================================================================
 
     void add_transition(size_t from_id, size_t to_id, char c);
     std::optional<std::vector<std::pair<size_t, char>>> get_transitions(size_t state_id);

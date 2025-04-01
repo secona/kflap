@@ -9,7 +9,8 @@ FiniteAutomatonSimulator::FiniteAutomatonSimulator(const FiniteAutomatonCore &fa
 
 void FiniteAutomatonSimulator::step(char ch)
 {
-    for (const auto &[state_id, c] : fac.transitions[current_state]) {
+    auto transitions = fac.get_transitions();
+    for (const auto &[state_id, c] : transitions[current_state]) {
         if (ch == c) {
             current_state = state_id;
             break;
@@ -19,7 +20,7 @@ void FiniteAutomatonSimulator::step(char ch)
 
 bool FiniteAutomatonSimulator::is_accepted()
 {
-    return fac.states[current_state]->final;
+    return fac.get_states().at(current_state)->final;
 }
 
 void FiniteAutomatonSimulator::reset()

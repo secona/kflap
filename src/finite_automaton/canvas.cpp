@@ -50,7 +50,7 @@ void draw_arrow(Vector2 from, Vector2 to)
 
 void FiniteAutomatonCanvas::draw()
 {
-    for (auto s : fa.states) {
+    for (auto s : fa.get_states()) {
         // draw_state(s);
     }
 
