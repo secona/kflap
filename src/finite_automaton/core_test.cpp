@@ -1,5 +1,6 @@
 #include "finite_automaton/core.h"
 #include <gtest/gtest.h>
+#include <optional>
 
 class FiniteAutomatonTests : public ::testing::Test {
 protected:
@@ -63,4 +64,14 @@ TEST(FiniteAutomatonJFF, CanParseJFF)
     EXPECT_EQ(fac.get_initial_state(), 0);
     EXPECT_EQ(fac.states_count(), 7);
     EXPECT_EQ(fac.transitions_count(), 21);
+}
+
+TEST(FiniteAutomatonJFF, CanParseJFFLambdaTransitions)
+{
+    FiniteAutomatonCore fac = FiniteAutomatonCore::from_jff("examples/NDFA.jff");
+    auto transitions = fac.get_state_transitions(9).value();
+
+    for (const auto &t : transitions) {
+        EXPECT_EQ(t.read, std::nullopt);
+    }
 }
