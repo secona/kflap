@@ -4,11 +4,26 @@
 #include "finite_automaton/core.h"
 
 class FiniteAutomatonSimulator {
-public:
-    FiniteAutomatonCore fac;
+private:
+    const FiniteAutomatonCore &fac;
     size_t current_state;
 
+public:
+    // =========================================================================
+    // Constructors
+    // =========================================================================
+
     FiniteAutomatonSimulator(const FiniteAutomatonCore &fac);
+
+    // =========================================================================
+    // Getter Methods
+    // =========================================================================
+
+    const State &get_current_state() const;
+
+    // =========================================================================
+    // Simulator Methods
+    // =========================================================================
 
     void step(char ch);
     void reset();

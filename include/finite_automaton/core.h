@@ -38,9 +38,9 @@ public:
     // Getter Methods
     // =========================================================================
 
-    const size_t& get_initial_state() const;
-    const std::unordered_map<size_t, std::shared_ptr<State>>& get_states() const;
-    const std::unordered_map<size_t, std::vector<std::pair<size_t, char>>>& get_transitions() const;
+    const size_t &get_initial_state() const;
+    const std::unordered_map<size_t, std::shared_ptr<State>> &get_states() const;
+    const std::unordered_map<size_t, std::vector<std::pair<size_t, char>>> &get_transitions() const;
 
     // =========================================================================
     // State Management Methods

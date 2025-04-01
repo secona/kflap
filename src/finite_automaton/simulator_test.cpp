@@ -12,14 +12,14 @@ TEST_F(FiniteAutomatonSimulatorTests, Step)
     FiniteAutomatonSimulator fas(fac);
 
     fas.step('c');
-    EXPECT_EQ(fas.current_state, 1);
+    EXPECT_EQ(fas.get_current_state().id, 1);
     EXPECT_FALSE(fas.is_accepted());
 
     fas.step('b');
-    EXPECT_EQ(fas.current_state, 2);
+    EXPECT_EQ(fas.get_current_state().id, 2);
     EXPECT_FALSE(fas.is_accepted());
 
     fas.reset();
-    EXPECT_EQ(fas.current_state, 0);
+    EXPECT_EQ(fas.get_current_state().id, 0);
     EXPECT_FALSE(fas.is_accepted());
 }
