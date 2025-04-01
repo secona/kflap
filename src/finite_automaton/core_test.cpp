@@ -56,3 +56,11 @@ TEST_F(FiniteAutomatonTests, AddTransition)
     EXPECT_EQ(transitions->at(0).first, state_id2);
     EXPECT_EQ(transitions->at(0).second, 'a');
 }
+
+TEST(FiniteAutomatonJFF, CanParseJFF)
+{
+    FiniteAutomatonCore fac = FiniteAutomatonCore::from_jff("examples/DFA.jff");
+    EXPECT_EQ(fac.get_initial_state(), 0);
+    EXPECT_EQ(fac.states_count(), 7);
+    EXPECT_EQ(fac.transitions_count(), 21);
+}

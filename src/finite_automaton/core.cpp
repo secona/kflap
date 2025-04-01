@@ -1,6 +1,9 @@
 #include "finite_automaton/core.h"
 
+#include <cstdlib>
+#include <iostream>
 #include <optional>
+#include <pugixml.hpp>
 #include <raylib.h>
 
 #include <memory>
@@ -8,7 +11,7 @@
 #include <vector>
 
 // ============================================================================
-// State Implementation
+// State Constructors
 // ============================================================================
 
 State::State(size_t id)
@@ -18,15 +21,68 @@ State::State(size_t id)
 {
 }
 
+State::State(size_t id, std::string name, bool final)
+    : id(id)
+    , name(name)
+    , final(final)
+{
+}
+
 // ============================================================================
-// FiniteAutomatonCore Implementation
+// FiniteAutomatonCore Constructors
 // ============================================================================
 
 FiniteAutomatonCore::FiniteAutomatonCore()
     : state_counter(0)
+    , initial_state(-1)
     , states()
     , transitions()
 {
+}
+
+FiniteAutomatonCore FiniteAutomatonCore::from_jff(std::string filename)
+{
+    FiniteAutomatonCore fac;
+
+    pugi::xml_document doc;
+
+    if (!doc.load_file(filename.c_str())) {
+        std::cerr << "Failed to load_file\n";
+        throw 1;
+    }
+
+    pugi::xml_node automaton = doc.child("structure").child("automaton");
+
+    for (pugi::xml_node state = automaton.child("state"); state; state = state.next_sibling("state")) {
+        size_t state_id = (size_t)state.attribute("id").as_int();
+        std::string name = state.attribute("name").as_string();
+        bool isfinal = state.attribute("final").as_bool();
+
+        fac.add_state(state_id, name, isfinal);
+
+        if (state.child("initial"))
+            fac.initial_state = state_id;
+    }
+
+    for (pugi::xml_node transition = automaton.child("transition"); transition;
+         transition = transition.next_sibling("transition")) {
+        size_t from = transition.child("from").text().as_int();
+        size_t to = transition.child("to").text().as_int();
+        char c = transition.child("read").text().as_string()[0];
+
+        fac.add_transition(from, to, c);
+    }
+
+    return fac;
+}
+
+// ============================================================================
+// FiniteAutomatonCore Methods
+// ============================================================================
+
+size_t FiniteAutomatonCore::get_initial_state()
+{
+    return initial_state;
 }
 
 size_t FiniteAutomatonCore::add_state()
@@ -38,6 +94,14 @@ size_t FiniteAutomatonCore::add_state()
     transitions.emplace(id, std::vector<std::pair<size_t, char>>());
 
     return id;
+}
+
+void FiniteAutomatonCore::add_state(size_t id, std::string name, bool final)
+{
+    auto state = std::make_shared<State>(id, name, final);
+
+    states.emplace(id, state);
+    transitions.emplace(id, std::vector<std::pair<size_t, char>>());
 }
 
 size_t FiniteAutomatonCore::states_count()
@@ -82,5 +146,10 @@ std::optional<std::vector<std::pair<size_t, char>>> FiniteAutomatonCore::get_tra
 
 size_t FiniteAutomatonCore::transitions_count()
 {
-    return transitions.size();
+    size_t sum = 0;
+
+    for (const auto &t : transitions)
+        sum += t.second.size();
+
+    return sum;
 }
